@@ -1,5 +1,10 @@
 # bpm-people-time-api
 
+## Build Status and Code coverage
+
+[![Build Status](https://travis-ci.org/ioet/bpm-people-time-api.svg?branch=master)](https://travis-ci.org/ioet/bpm-people-time-api)
+[![Code Coverage](https://codecov.io/gh/ioet/bpm-people-time-api/branch/master/graph/badge.svg)](https://codecov.io/gh/ioet/bpm-people-time-api)
+
 ## Run it locally
 
 First run this to start eureka and edge server
