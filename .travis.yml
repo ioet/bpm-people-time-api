@@ -1,0 +1,23 @@
+sudo: required
+language: java
+jdk:
+ - oraclejdk8
+services:
+ - docker
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+after_success:
+ - bash <(curl -s https://codecov.io/bash)
+ - pip install --user awscli
+ - eval $(aws ecr get-login --no-include-email --region us-east-1)
+ - docker build -t bpm-people-time-api:$TRAVIS_BUILD_ID . --build-arg JAR_FILE=build/libs/bpm-people-time-api-0.0.1.jar
+ - docker tag bpm-people-time-api:$TRAVIS_BUILD_ID 524819651720.dkr.ecr.us-east-1.amazonaws.com/bpm-people-time-api:$TRAVIS_BUILD_ID
+ - docker push 524819651720.dkr.ecr.us-east-1.amazonaws.com/bpm-people-time-api:$TRAVIS_BUILD_ID
+ - docker build -t bpm-people-time-api . --build-arg JAR_FILE=build/libs/bpm-people-time-api-0.0.1.jar
+ - docker tag bpm-people-time-api:latest 524819651720.dkr.ecr.us-east-1.amazonaws.com/bpm-people-time-api:latest
+ - docker push 524819651720.dkr.ecr.us-east-1.amazonaws.com/bpm-people-time-api:latest
