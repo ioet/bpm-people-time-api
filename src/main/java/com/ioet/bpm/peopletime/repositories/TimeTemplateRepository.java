@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 @EnableScan
 public interface TimeTemplateRepository extends CrudRepository<TimeTemplate, String> {
 
+    Iterable<TimeTemplate> findByPersonId(String personId);
 }

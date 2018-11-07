@@ -1,6 +1,7 @@
 package com.ioet.bpm.peopletime.boundaries;
 
 import com.ioet.bpm.peopletime.domain.TimeEvent;
+import com.ioet.bpm.peopletime.domain.TimeTemplate;
 import com.ioet.bpm.peopletime.repositories.TimeEventRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,11 +17,12 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/timeevents")
-@Api(value = "/timeevents", description = "Manage Time Events", produces = "application/json")
+@RequestMapping("/people-time/time-events")
+@Api(value = "/people-time/time-events", description = "Manage Time Events", produces = "application/json")
 public class TimeEventController {
 
     private final TimeEventRepository timeEventRepository;
+
 
     @ApiOperation(value = "Return a list of all time events", response = TimeEvent.class, responseContainer = "List")
     @ApiResponses(value = {
@@ -31,6 +33,7 @@ public class TimeEventController {
         Iterable<TimeEvent> timeEvents = this.timeEventRepository.findAll();
         return new ResponseEntity<>(timeEvents, HttpStatus.OK);
     }
+
 
     @ApiOperation(value = "Return one time event", response = TimeEvent.class)
     @ApiResponses(value = {
@@ -44,16 +47,18 @@ public class TimeEventController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+
     @ApiOperation(value = "Return the created time event", response = TimeEvent.class)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successfully created the time event")
     })
     @PostMapping(produces = "application/json")
-    public ResponseEntity<TimeEvent> createTimeEvent(@RequestBody TimeEvent timeEvent) {
-
+    public ResponseEntity<TimeEvent> createTimeEvent(@RequestBody TimeTemplate timeTemplate) {
+        TimeEvent timeEvent = new TimeEvent(timeTemplate);
         TimeEvent timeEventCreated = timeEventRepository.save(timeEvent);
         return new ResponseEntity<>(timeEventCreated, HttpStatus.CREATED);
     }
+
 
     @ApiOperation(value = "Delete a time event")
     @ApiResponses(value = {
@@ -69,6 +74,7 @@ public class TimeEventController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 
     @ApiOperation(value = "Return the updated time event", response = TimeEvent.class)
     @ApiResponses(value = {

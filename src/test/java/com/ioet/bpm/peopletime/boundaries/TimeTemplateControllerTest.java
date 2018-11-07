@@ -28,10 +28,11 @@ public class TimeTemplateControllerTest {
     @Test
     public void templatesAreListedUsingTheRepository() {
 
-        ResponseEntity<Iterable> templates = timeTemplateController.getAllTimeTemplates();
+        String personId = "somePersonId";
+        ResponseEntity<Iterable> templates = timeTemplateController.getAllTimeTemplatesForOnePerson(personId);
 
         assertEquals(HttpStatus.OK, templates.getStatusCode());
-        verify(timeTemplateRepository, times(1)).findAll();
+        verify(timeTemplateRepository, times(1)).findByPersonId(personId);
     }
 
     @Test
@@ -56,31 +57,14 @@ public class TimeTemplateControllerTest {
     }
 
     @Test
-    public void whenATemplateDoesNotExistA404IsExpected() {
-        ResponseEntity<TimeTemplate> notExistingTemplateResponse = timeTemplateController.getTimeTemplate("not_existing_id");
+    public void theBodyContainsTheTemplatesForOnePersonFromTheRepository() {
+        String personId = "userId";
+        Iterable<TimeTemplate> templatesFound = mock(Iterable.class);
+        when(timeTemplateRepository.findByPersonId(personId)).thenReturn(templatesFound);
 
-        assertNull(notExistingTemplateResponse.getBody());
-        assertEquals(HttpStatus.NOT_FOUND, notExistingTemplateResponse.getStatusCode());
-    }
+        ResponseEntity<Iterable> existingTemplateResponse = timeTemplateController.getAllTimeTemplatesForOnePerson(personId);
 
-    @Test
-    public void aTemplateIsFoundUsingTheRepository() {
-        String templateId = "templateId";
-
-        timeTemplateController.getTimeTemplate(templateId);
-
-        verify(timeTemplateRepository, times(1)).findById(templateId);
-    }
-
-    @Test
-    public void theBodyContainsTheTemplateFromTheRepository() {
-        String templateIdToFind = "id";
-        TimeTemplate templateFound = mock(TimeTemplate.class);
-        when(timeTemplateRepository.findById(templateIdToFind)).thenReturn(Optional.of(templateFound));
-
-        ResponseEntity<TimeTemplate> existingTemplateResponse = timeTemplateController.getTimeTemplate(templateIdToFind);
-
-        assertEquals(templateFound, existingTemplateResponse.getBody());
+        assertEquals(templatesFound, existingTemplateResponse.getBody());
         assertEquals(HttpStatus.OK, existingTemplateResponse.getStatusCode());
     }
 

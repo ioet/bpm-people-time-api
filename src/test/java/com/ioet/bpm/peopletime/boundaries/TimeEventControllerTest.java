@@ -2,6 +2,7 @@ package com.ioet.bpm.peopletime.boundaries;
 
 import com.ioet.bpm.peopletime.domain.TimeEvent;
 import com.ioet.bpm.peopletime.domain.TimeEvent;
+import com.ioet.bpm.peopletime.domain.TimeTemplate;
 import com.ioet.bpm.peopletime.repositories.TimeEventRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +40,10 @@ public class TimeEventControllerTest {
     public void whenAEventIsCreatedTheNewEventIsReturnedCorrectly() {
         TimeEvent eventCreated = mock(TimeEvent.class);
 
+        TimeTemplate templateToCreateEventFrom = new TimeTemplate();
+        templateToCreateEventFrom.setPersonId("somePersonId");
+        templateToCreateEventFrom.setActivity("I did some things.");
+
         TimeEvent eventToCreate = new TimeEvent();
         eventToCreate.setPersonId("somePersonId");
         eventToCreate.setActivity("I did some things.");
@@ -47,7 +52,7 @@ public class TimeEventControllerTest {
 
         ResponseEntity<TimeEvent> eventCreatedResponse;
 
-        eventCreatedResponse = timeEventController.createTimeEvent(eventToCreate);
+        eventCreatedResponse = timeEventController.createTimeEvent(templateToCreateEventFrom);
 
         assertEquals(eventCreated, eventCreatedResponse.getBody());
         assertEquals(HttpStatus.CREATED, eventCreatedResponse.getStatusCode());

@@ -27,7 +27,7 @@ public class TimeTemplate {
     private String personId;
 
     @DynamoDBAttribute
-    private String customerId;
+    private String organizationId;
 
     @NotBlank
     @DynamoDBAttribute

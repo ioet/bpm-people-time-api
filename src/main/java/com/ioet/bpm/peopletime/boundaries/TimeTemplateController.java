@@ -16,33 +16,23 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/timetemplates")
-@Api(value = "/timetemplates", description = "Manage Time Templates", produces = "application/json")
+@RequestMapping("/people-time/time-templates")
+@Api(value = "/people-time/time-templates", description = "Manage Time Templates", produces = "application/json")
 public class TimeTemplateController {
 
     private final TimeTemplateRepository timeTemplateRepository;
 
-    @ApiOperation(value = "Return a list of all templates", response = TimeTemplate.class, responseContainer = "List")
+
+    @ApiOperation(value = "Return a list of all templates belonging to one person", response = TimeTemplate.class, responseContainer = "List")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved all templates")
+            @ApiResponse(code = 200, message = "Successfully retrieved all templates from one person")
     })
     @GetMapping(produces = "application/json")
-    public ResponseEntity<Iterable> getAllTimeTemplates() {
-        Iterable<TimeTemplate> timeTemplates = this.timeTemplateRepository.findAll();
+    public ResponseEntity<Iterable> getAllTimeTemplatesForOnePerson(@RequestParam(value = "personId") String personId) {
+        Iterable<TimeTemplate> timeTemplates = this.timeTemplateRepository.findByPersonId(personId);
         return new ResponseEntity<>(timeTemplates, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Return one template", response = TimeTemplate.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved the template")
-    })
-    @GetMapping(path = "/{id}", produces = "application/json")
-    public ResponseEntity<TimeTemplate> getTimeTemplate(@PathVariable(value = "id") String templateId) {
-        Optional<TimeTemplate> templateOptional = timeTemplateRepository.findById(templateId);
-        return templateOptional.map(
-                template -> new ResponseEntity<>(template, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
 
     @ApiOperation(value = "Return the created template", response = TimeTemplate.class)
     @ApiResponses(value = {
@@ -54,6 +44,7 @@ public class TimeTemplateController {
         TimeTemplate templateCreated = timeTemplateRepository.save(template);
         return new ResponseEntity<>(templateCreated, HttpStatus.CREATED);
     }
+
 
     @ApiOperation(value = "Delete a template")
     @ApiResponses(value = {
@@ -69,6 +60,7 @@ public class TimeTemplateController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 
     @ApiOperation(value = "Return the updated template", response = TimeTemplate.class)
     @ApiResponses(value = {

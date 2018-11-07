@@ -40,4 +40,12 @@ public class TimeEvent {
 
     @DynamoDBAttribute
     private Date stopTime;
+
+    public TimeEvent(TimeTemplate timeTemplate) {
+        this.personId = timeTemplate.getPersonId();
+        this.organizationId = timeTemplate.getOrganizationId();
+        this.projectId = timeTemplate.getProjectId();
+        this.activity = timeTemplate.getActivity();
+        this.templateId = timeTemplate.getId();
+    }
 }
