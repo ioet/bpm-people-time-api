@@ -16,8 +16,8 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/people-time/time-templates")
-@Api(value = "/people-time/time-templates", description = "Manage Time Templates", produces = "application/json")
+@RequestMapping("/time-templates")
+@Api(value = "/time-templates", description = "Manage Time Templates", produces = "application/json")
 public class TimeTemplateController {
 
     private final TimeTemplateRepository timeTemplateRepository;
@@ -29,7 +29,7 @@ public class TimeTemplateController {
     })
     @GetMapping(produces = "application/json")
     public ResponseEntity<Iterable> getAllTimeTemplatesForOnePerson(@RequestParam(value = "personId") String personId) {
-        Iterable<TimeTemplate> timeTemplates = this.timeTemplateRepository.findByPersonId(personId);
+        Iterable<TimeTemplate> timeTemplates = timeTemplateRepository.findByPersonId(personId);
         return new ResponseEntity<>(timeTemplates, HttpStatus.OK);
     }
 
@@ -39,7 +39,7 @@ public class TimeTemplateController {
             @ApiResponse(code = 201, message = "Successfully created the template")
     })
     @PostMapping(produces = "application/json")
-    public ResponseEntity<TimeTemplate> createTimeTemplate(@RequestBody TimeTemplate template) {
+    public ResponseEntity<TimeTemplate> createTimeTemplate(@Valid @RequestBody TimeTemplate template) {
 
         TimeTemplate templateCreated = timeTemplateRepository.save(template);
         return new ResponseEntity<>(templateCreated, HttpStatus.CREATED);

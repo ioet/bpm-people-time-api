@@ -3,6 +3,8 @@ package com.ioet.bpm.peopletime.boundaries;
 import com.ioet.bpm.peopletime.domain.TimeEvent;
 import com.ioet.bpm.peopletime.domain.TimeTemplate;
 import com.ioet.bpm.peopletime.repositories.TimeEventRepository;
+import com.ioet.bpm.peopletime.repositories.TimeTemplateRepository;
+import com.ioet.bpm.peopletime.services.TimeEventService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -13,50 +15,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/people-time/time-events")
-@Api(value = "/people-time/time-events", description = "Manage Time Events", produces = "application/json")
+@RequestMapping("/time-events")
+@Api(value = "/time-events", description = "Manage Time Events", produces = "application/json")
 public class TimeEventController {
 
     private final TimeEventRepository timeEventRepository;
+    private final TimeTemplateRepository timeTemplateRepository;
+    private final TimeEventService timeEventService;
 
 
-    @ApiOperation(value = "Return a list of all time events", response = TimeEvent.class, responseContainer = "List")
+    @ApiOperation(value = "Return a list of all events belonging to one person", response = TimeEvent.class, responseContainer = "List")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved all time events")
+            @ApiResponse(code = 200, message = "Successfully retrieved all event from one person")
     })
     @GetMapping(produces = "application/json")
-    public ResponseEntity<Iterable> getAllTimeEvents() {
-        Iterable<TimeEvent> timeEvents = this.timeEventRepository.findAll();
+    public ResponseEntity<Iterable> getAllTimeEventsForOnePerson(@RequestParam(value = "personId") String personId) {
+        Iterable<TimeEvent> timeEvents = this.timeEventRepository.findByPersonId(personId);
         return new ResponseEntity<>(timeEvents, HttpStatus.OK);
-    }
-
-
-    @ApiOperation(value = "Return one time event", response = TimeEvent.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved the time event")
-    })
-    @GetMapping(path = "/{id}", produces = "application/json")
-    public ResponseEntity<TimeEvent> getTimeEvent(@PathVariable(value = "id") String eventId) {
-        Optional<TimeEvent> eventOptional = timeEventRepository.findById(eventId);
-        return eventOptional.map(
-                event -> new ResponseEntity<>(event, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-
-    @ApiOperation(value = "Return the created time event", response = TimeEvent.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successfully created the time event")
-    })
-    @PostMapping(produces = "application/json")
-    public ResponseEntity<TimeEvent> createTimeEvent(@RequestBody TimeTemplate timeTemplate) {
-        TimeEvent timeEvent = new TimeEvent(timeTemplate);
-        TimeEvent timeEventCreated = timeEventRepository.save(timeEvent);
-        return new ResponseEntity<>(timeEventCreated, HttpStatus.CREATED);
     }
 
 
@@ -90,6 +70,38 @@ public class TimeEventController {
             timeEventToUpdate.setId(timeEventOptional.get().getId());
             TimeEvent updatedTimeEvent = timeEventRepository.save(timeEventToUpdate);
             return new ResponseEntity<>(updatedTimeEvent, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
+    @ApiOperation(value = "Start a time-template -> create time-event", response = TimeEvent.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successfully created the time event")
+    })
+    @PostMapping(path = "/start", produces = "application/json")
+    public ResponseEntity startTimeEvent(@RequestParam(value = "templateId") String templateId, @RequestParam(value = "personId") String userId) {
+        Optional<TimeTemplate> timeTemplateOptional = timeTemplateRepository.findById(templateId);
+        if (timeTemplateOptional.isPresent()) {
+            TimeEvent timeEventCreated = timeEventService.createNewTimeEvent(timeTemplateOptional.get(), userId);
+            return new ResponseEntity<>(timeEventCreated, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Template with id '" + templateId + "' not found.", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @ApiOperation(value = "Stop a time-template -> set time-event stopTime", response = TimeEvent.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully stopped the time event"),
+            @ApiResponse(code = 404, message = "The time event to stop was not found")
+    })
+    @PostMapping(path = "/stop", produces = "application/json")
+    public ResponseEntity<TimeEvent> stopTimeEvent(@RequestParam(value = "personId") String userId) {
+        Optional<TimeEvent> timeEventToStopOptional = timeEventRepository.findByStopTimeIsNullAndPersonId(userId);
+        if (timeEventToStopOptional.isPresent()) {
+            TimeEvent stoppedTimeEvent = timeEventService.saveStopTimeToTimeEvent(timeEventToStopOptional.get());
+            return new ResponseEntity<>(stoppedTimeEvent, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

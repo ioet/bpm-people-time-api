@@ -1,6 +1,8 @@
 package com.ioet.bpm.peopletime.domain;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +10,8 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Data
 @DynamoDBTable(tableName = "time_event")
 public class TimeEvent {
@@ -30,6 +34,9 @@ public class TimeEvent {
     @DynamoDBAttribute
     private String activity;
 
+    @DynamoDBAttribute
+    private String note;
+
     @NotBlank
     @DynamoDBAttribute
     private String templateId;
@@ -41,8 +48,8 @@ public class TimeEvent {
     @DynamoDBAttribute
     private Date stopTime;
 
-    public TimeEvent(TimeTemplate timeTemplate) {
-        this.personId = timeTemplate.getPersonId();
+    public TimeEvent(TimeTemplate timeTemplate, String userId) {
+        this.personId = userId;
         this.organizationId = timeTemplate.getOrganizationId();
         this.projectId = timeTemplate.getProjectId();
         this.activity = timeTemplate.getActivity();

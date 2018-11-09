@@ -2,22 +2,26 @@ package com.ioet.bpm.peopletime.boundaries;
 
 import com.ioet.bpm.peopletime.domain.TimeTemplate;
 import com.ioet.bpm.peopletime.repositories.TimeTemplateRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-public class TimeTemplateControllerTest {
+@Tag("MyTests")
+@ExtendWith(MockitoExtension.class)
+class TimeTemplateControllerTest {
 
     @Mock
     private TimeTemplateRepository timeTemplateRepository;
@@ -26,38 +30,23 @@ public class TimeTemplateControllerTest {
     private TimeTemplateController timeTemplateController;
 
     @Test
-    public void templatesAreListedUsingTheRepository() {
-
-        String personId = "somePersonId";
-        ResponseEntity<Iterable> templates = timeTemplateController.getAllTimeTemplatesForOnePerson(personId);
-
-        assertEquals(HttpStatus.OK, templates.getStatusCode());
-        verify(timeTemplateRepository, times(1)).findByPersonId(personId);
-    }
-
-    @Test
-    public void whenATemplateIsCreatedTheNewTemplateIsReturnedCorrectly() {
+    void whenATemplateIsCreatedTheNewTemplateIsReturnedCorrectly() {
         TimeTemplate templateCreated = mock(TimeTemplate.class);
-
         TimeTemplate templateToCreate = new TimeTemplate();
         templateToCreate.setName("Test Name");
         templateToCreate.setPersonId("somePersonId");
         templateToCreate.setActivity("I did some things.");
-
         when(timeTemplateRepository.save(templateToCreate)).thenReturn(templateCreated);
 
-        ResponseEntity<TimeTemplate> templateCreatedResponse;
-
-        templateCreatedResponse = timeTemplateController.createTimeTemplate(templateToCreate);
+        ResponseEntity<TimeTemplate> templateCreatedResponse = timeTemplateController.createTimeTemplate(templateToCreate);
 
         assertEquals(templateCreated, templateCreatedResponse.getBody());
         assertEquals(HttpStatus.CREATED, templateCreatedResponse.getStatusCode());
         verify(timeTemplateRepository, times(1)).save(templateToCreate);
-
     }
 
     @Test
-    public void theBodyContainsTheTemplatesForOnePersonFromTheRepository() {
+    void theBodyContainsTheTemplatesForOnePersonFromTheRepository() {
         String personId = "userId";
         Iterable<TimeTemplate> templatesFound = mock(Iterable.class);
         when(timeTemplateRepository.findByPersonId(personId)).thenReturn(templatesFound);
@@ -69,7 +58,7 @@ public class TimeTemplateControllerTest {
     }
 
     @Test
-    public void ifTheTemplateToDeleteDoesNotExistA404IsReturned() {
+    void ifTheTemplateToDeleteDoesNotExistA404IsReturned() {
         String id = "id";
         when(timeTemplateRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -79,7 +68,7 @@ public class TimeTemplateControllerTest {
     }
 
     @Test
-    public void whenDeletingATemplateTheResponseIsEmpty() {
+    void whenDeletingATemplateTheResponseIsEmpty() {
         String templateIdToDelete = "id";
         TimeTemplate templateToDelete = mock(TimeTemplate.class);
         when(timeTemplateRepository.findById(templateIdToDelete)).thenReturn(Optional.of(templateToDelete));
@@ -92,7 +81,7 @@ public class TimeTemplateControllerTest {
     }
 
     @Test
-    public void ifTheTemplateToUpdateDoesNotExistA404IsReturned() {
+    void ifTheTemplateToUpdateDoesNotExistA404IsReturned() {
         String id = "id";
         when(timeTemplateRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -102,13 +91,11 @@ public class TimeTemplateControllerTest {
     }
 
     @Test
-    public void whenATemplateIsUpdatedTheUpdatedTemplateIsReturned() {
+    void whenATemplateIsUpdatedTheUpdatedTemplateIsReturned() {
         TimeTemplate templateUpdated = mock(TimeTemplate.class);
         Optional<TimeTemplate> templateFound = Optional.of(mock(TimeTemplate.class));
-
         String idTemplateToUpdate = "id";
         TimeTemplate templateToUpdate = mock(TimeTemplate.class);
-
         when(timeTemplateRepository.findById(idTemplateToUpdate)).thenReturn(templateFound);
         when(timeTemplateRepository.save(templateToUpdate)).thenReturn(templateUpdated);
 
