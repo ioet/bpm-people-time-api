@@ -22,7 +22,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@Tag("MyTests")
 @ExtendWith(MockitoExtension.class)
 class TimeEventControllerTest {
 
