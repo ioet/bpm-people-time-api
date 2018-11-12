@@ -1,11 +1,11 @@
-package com.ioet.bpm.peopletime.boundaries;
+package com.ioet.bpm.peopletime.timeevents.boundaries;
 
-import com.ioet.bpm.peopletime.domain.TimeEvent;
-import com.ioet.bpm.peopletime.domain.TimeTemplate;
-import com.ioet.bpm.peopletime.repositories.TimeEventRepository;
-import com.ioet.bpm.peopletime.repositories.TimeTemplateRepository;
-import com.ioet.bpm.peopletime.services.TimeEventService;
-import org.apache.commons.collections.iterators.ArrayIterator;
+import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
+import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
+import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
+import com.ioet.bpm.peopletime.timetemplates.repositories.TimeTemplateRepository;
+import com.ioet.bpm.peopletime.timeevents.services.TimeEventService;
+import com.ioet.bpm.peopletime.timeevents.boundaries.TimeEventController;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,12 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import sun.util.resources.cldr.ee.TimeZoneNames_ee;
 
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,10 +1,10 @@
-package com.ioet.bpm.peopletime.boundaries;
+package com.ioet.bpm.peopletime.timeevents.boundaries;
 
-import com.ioet.bpm.peopletime.domain.TimeEvent;
-import com.ioet.bpm.peopletime.domain.TimeTemplate;
-import com.ioet.bpm.peopletime.repositories.TimeEventRepository;
-import com.ioet.bpm.peopletime.repositories.TimeTemplateRepository;
-import com.ioet.bpm.peopletime.services.TimeEventService;
+import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
+import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
+import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
+import com.ioet.bpm.peopletime.timetemplates.repositories.TimeTemplateRepository;
+import com.ioet.bpm.peopletime.timeevents.services.TimeEventService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -31,7 +30,7 @@ public class TimeEventController {
 
     @ApiOperation(value = "Return a list of all events belonging to one person", response = TimeEvent.class, responseContainer = "List")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved all event from one person")
+            @ApiResponse(code = 200, message = "Successfully retrieved all events belonging to one person")
     })
     @GetMapping(produces = "application/json")
     public ResponseEntity<Iterable> getAllTimeEventsForOnePerson(@RequestParam(value = "personId") String personId) {

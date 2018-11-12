@@ -1,6 +1,6 @@
-package com.ioet.bpm.peopletime.repositories;
+package com.ioet.bpm.peopletime.timeevents.repositories;
 
-import com.ioet.bpm.peopletime.domain.TimeEvent;
+import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.springframework.data.repository.CrudRepository;
 

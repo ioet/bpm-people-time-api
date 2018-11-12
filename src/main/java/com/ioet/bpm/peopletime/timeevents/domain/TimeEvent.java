@@ -1,6 +1,7 @@
-package com.ioet.bpm.peopletime.domain;
+package com.ioet.bpm.peopletime.timeevents.domain;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Data
-@DynamoDBTable(tableName = "time_event")
+@DynamoDBTable(tableName = "people_time_event")
 public class TimeEvent {
 
     @DynamoDBHashKey

@@ -1,8 +1,9 @@
-package com.ioet.bpm.peopletime.services;
+package com.ioet.bpm.peopletime.timeevents.services;
 
-import com.ioet.bpm.peopletime.domain.TimeEvent;
-import com.ioet.bpm.peopletime.domain.TimeTemplate;
-import com.ioet.bpm.peopletime.repositories.TimeEventRepository;
+import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
+import com.ioet.bpm.peopletime.timeevents.services.TimeEventService;
+import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
+import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -33,9 +33,8 @@ public class SwaggerConfig {
     private ApiInfo metaData() {
         return new ApiInfoBuilder()
                 .title("BPM TimeTemplate API")
-                .description("API with CRUD methods for the bpm-peopletime-project")
+                .description("Manage time-templates and time-events for bpm-people-time. You can also start and stop time-events")
                 .version("0.0.1")
                 .build();
     }
-
 }

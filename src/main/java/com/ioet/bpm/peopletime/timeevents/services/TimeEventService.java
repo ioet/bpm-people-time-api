@@ -1,8 +1,8 @@
-package com.ioet.bpm.peopletime.services;
+package com.ioet.bpm.peopletime.timeevents.services;
 
-import com.ioet.bpm.peopletime.domain.TimeEvent;
-import com.ioet.bpm.peopletime.domain.TimeTemplate;
-import com.ioet.bpm.peopletime.repositories.TimeEventRepository;
+import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
+import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
+import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

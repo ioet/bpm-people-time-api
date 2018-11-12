@@ -8,8 +8,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
-import com.ioet.bpm.peopletime.domain.TimeEvent;
-import com.ioet.bpm.peopletime.domain.TimeTemplate;
+import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
+import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.beans.factory.InitializingBean;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @Slf4j
 @Configuration
-@EnableDynamoDBRepositories(basePackages = "com.ioet.bpm.peopletime.repositories")
+@EnableDynamoDBRepositories(basePackages = "com.ioet.bpm.peopletime")
 public class DynamoDBConfig {
 
     @Bean

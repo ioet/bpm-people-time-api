@@ -1,7 +1,7 @@
-package com.ioet.bpm.peopletime.boundaries;
+package com.ioet.bpm.peopletime.timetemplates.boundaries;
 
-import com.ioet.bpm.peopletime.domain.TimeTemplate;
-import com.ioet.bpm.peopletime.repositories.TimeTemplateRepository;
+import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
+import com.ioet.bpm.peopletime.timetemplates.repositories.TimeTemplateRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

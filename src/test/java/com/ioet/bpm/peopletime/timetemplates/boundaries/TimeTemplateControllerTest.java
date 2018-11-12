@@ -1,7 +1,7 @@
-package com.ioet.bpm.peopletime.boundaries;
+package com.ioet.bpm.peopletime.timetemplates.boundaries;
 
-import com.ioet.bpm.peopletime.domain.TimeTemplate;
-import com.ioet.bpm.peopletime.repositories.TimeTemplateRepository;
+import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
+import com.ioet.bpm.peopletime.timetemplates.repositories.TimeTemplateRepository;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
