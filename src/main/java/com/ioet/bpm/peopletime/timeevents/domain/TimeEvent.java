@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Data
-@DynamoDBTable(tableName = "people_time_event")
+@DynamoDBTable(tableName = "people_time_time_event")
 public class TimeEvent {
 
     @DynamoDBHashKey

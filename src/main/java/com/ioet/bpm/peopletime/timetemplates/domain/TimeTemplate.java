@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@DynamoDBTable(tableName = "people_time_template")
+@DynamoDBTable(tableName = "people_time_time_template")
 public class TimeTemplate {
 
     @DynamoDBHashKey
