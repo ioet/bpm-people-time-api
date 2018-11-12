@@ -24,6 +24,13 @@ Swagger is integrated and available in this URL:
 http://IP_ADDRESS:PORT/swagger-ui.html
 ```
 
+## Postman
+There is a Postman Collection included to test the api.  
+You can run it with newman with this command:
+```
+newman run postman/collection.json -e postman/env.json
+```
+
 ## Docker
 
 The project has integrated a docker plugin so you can generate a docker image using the following Gradle task:

@@ -1,0 +1,666 @@
+{
+	"info": {
+		"_postman_id": "9ccfd952-ffad-4763-9928-ed0fd712c7a4",
+		"name": "people-time",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "time-templates",
+			"item": [
+				{
+					"name": "Create time-template",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4fa9794f-33c0-473d-abbb-4eaee3fd9788",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.globals.set(\"time-template-id\", pm.response.json().id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8ca1470a-1f0b-4d37-9a59-ca77ae029b92",
+								"exec": [
+									"var service_url = pm.environment.get(\"BPM_PEOPLE_TIME_URL\");",
+									"var url = service_url || \"http://localhost:8084\";",
+									"pm.globals.set(\"url\", url);",
+									"pm.globals.set(\"person_id\", \"antonio\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"activity\": \"development\",\n  \"name\": \"my development template for bpm\",\n  \"organization_id\": \"ioet\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/time-templates",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-templates"
+							]
+						},
+						"description": "Create a new time-template"
+					},
+					"response": []
+				},
+				{
+					"name": "Update time-template",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5dbd011c-97ab-468e-8dae-245140de95f2",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check if activity changed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.activity).to.eql(\"testing\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"activity\": \"testing\",\n  \"name\": \"my development template for bpm\",\n  \"organization_id\": \"ioet\",\n  \"person_id\": \"antonio\",\n  \"project_id\": \"bpm\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/time-templates/{{time-template-id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-templates",
+								"{{time-template-id}}"
+							]
+						},
+						"description": "Return the updated value"
+					},
+					"response": []
+				},
+				{
+					"name": "Get time-templates for one user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "32d1ed7e-7007-4568-898a-5f69e2d5708c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check that only one entry is returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(1);",
+									"});",
+									"",
+									"pm.test(\"Check that the correct entry is returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].person_id).to.eql(pm.globals.get(\"person_id\"));",
+									"});",
+									"",
+									"postman.setNextRequest('Start a time-event');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/time-templates?personId={{person_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-templates"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "{{person_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete the created time-template",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "344b63b2-699d-430a-bb42-e0544ccf19e0",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{url}}/time-templates/{{time-template-id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-templates",
+								"{{time-template-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "No template returned anymore",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "32d1ed7e-7007-4568-898a-5f69e2d5708c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check that only one entry is returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(0);",
+									"});",
+									"",
+									"postman.setNextRequest(null);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/time-templates?personId={{person_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-templates"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "{{person_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "time-events",
+			"item": [
+				{
+					"name": "Start a time-event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5b571ba1-0e26-4daf-8ded-3bc36acc35a0",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Template_id is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.template_id).to.eql(pm.globals.get(\"time-template-id\"));",
+									"});",
+									"",
+									"pm.test(\"Start_time is not null\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.start_time).not.eql(null);",
+									"});",
+									"",
+									"pm.test(\"Stop_time is null\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.stop_time).to.eql(null);",
+									"});",
+									"",
+									"pm.globals.set(\"1-time-event-id\", pm.response.json().id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{url}}/time-events/start?templateId={{time-template-id}}&personId={{person_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-events",
+								"start"
+							],
+							"query": [
+								{
+									"key": "templateId",
+									"value": "{{time-template-id}}"
+								},
+								{
+									"key": "personId",
+									"value": "{{person_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start a new time-event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5b571ba1-0e26-4daf-8ded-3bc36acc35a0",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Template_id is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.template_id).to.eql(pm.globals.get(\"time-template-id\"));",
+									"});",
+									"",
+									"pm.test(\"Start_time is not null\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.start_time).not.eql(null);",
+									"});",
+									"",
+									"pm.test(\"Stop_time is null\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.stop_time).to.eql(null);",
+									"});",
+									"",
+									"pm.globals.set(\"2-time-event-id\", pm.response.json().id);",
+									"pm.globals.set(\"2-time-event-start-time\", pm.response.json().start_time);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{url}}/time-events/start?templateId={{time-template-id}}&personId={{person_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-events",
+								"start"
+							],
+							"query": [
+								{
+									"key": "templateId",
+									"value": "{{time-template-id}}"
+								},
+								{
+									"key": "personId",
+									"value": "{{person_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get time-events of one person",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f8d8a02e-4fe7-478e-bc36-90bf1d0d1c90",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check that two time-events are returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(2);",
+									"});",
+									"",
+									"pm.test(\"Check that first event has stop_time set to some time\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var event = jsonData.filter(e => e.id === pm.globals.get(\"1-time-event-id\"))[0];",
+									"    pm.expect(event.stop_time).not.eql(null);",
+									"});",
+									"",
+									"pm.test(\"Check that second event has stop_time = null\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var event = jsonData.filter(e => e.id === pm.globals.get(\"2-time-event-id\"))[0];",
+									"    pm.expect(event.stop_time).to.eql(null);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/time-events?personId={{person_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-events"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "{{person_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update time-event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5b571ba1-0e26-4daf-8ded-3bc36acc35a0",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Note was updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.note).to.eql(\"updated note\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"activity\": \"testing\",\n  \"organization_id\": \"ioet\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm\",\n  \"note\": \"updated note\",\n  \"template_id\": \"{{time-template-id}}\",\n  \"start_time\": \"{{2-time-event-start-time}}\"\n}\n"
+						},
+						"url": {
+							"raw": "{{url}}/time-events/{{2-time-event-id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-events",
+								"{{2-time-event-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Stop the active time-event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5b571ba1-0e26-4daf-8ded-3bc36acc35a0",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Template_id is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.template_id).to.eql(pm.globals.get(\"time-template-id\"));",
+									"});",
+									"",
+									"pm.test(\"Time-event-id is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(pm.globals.get(\"2-time-event-id\"));",
+									"});",
+									"",
+									"pm.test(\"Start_time is not null\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.start_time).not.eql(null);",
+									"});",
+									"",
+									"pm.test(\"Stop_time is not null\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.stop_time).not.eql(null);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{url}}/time-events/stop?personId={{person_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-events",
+								"stop"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "{{person_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete first time-event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1709fe3f-be0d-4c6a-a89a-3fc758382101",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{url}}/time-events/{{1-time-event-id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-events",
+								"{{1-time-event-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete second time-event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9e67a345-362b-40b1-8f56-5bd2bf637191",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{url}}/time-events/{{2-time-event-id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-events",
+								"{{2-time-event-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "No time-event returned anymore",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3d4d9de6-2ae5-424d-aa9f-57937b8c997a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check that two time-events are returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(0);",
+									"});",
+									"",
+									"postman.setNextRequest('Delete the created time-template');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/time-events?personId={{person_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-events"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "{{person_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
