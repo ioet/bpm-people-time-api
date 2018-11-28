@@ -1,7 +1,6 @@
 package com.ioet.bpm.peopletime.timeevents.domain;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,13 +24,23 @@ public class TimeEvent {
     @DynamoDBAttribute
     private String personId;
 
+    @NotBlank
     @DynamoDBAttribute
     private String organizationId;
 
     @NotBlank
     @DynamoDBAttribute
+    private String organizationName;
+
+    @NotBlank
+    @DynamoDBAttribute
     private String projectId;
 
+    @NotBlank
+    @DynamoDBAttribute
+    private String projectName;
+
+    @NotBlank
     @DynamoDBAttribute
     private String activity;
 
@@ -49,11 +58,7 @@ public class TimeEvent {
     @DynamoDBAttribute
     private Date stopTime;
 
-    public TimeEvent(TimeTemplate timeTemplate, String userId) {
+    public TimeEvent(String userId) {
         this.personId = userId;
-        this.organizationId = timeTemplate.getOrganizationId();
-        this.projectId = timeTemplate.getProjectId();
-        this.activity = timeTemplate.getActivity();
-        this.templateId = timeTemplate.getId();
     }
 }
