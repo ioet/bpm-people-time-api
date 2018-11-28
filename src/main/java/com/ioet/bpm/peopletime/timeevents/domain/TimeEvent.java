@@ -1,6 +1,7 @@
 package com.ioet.bpm.peopletime.timeevents.domain;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.ioet.bpm.peopletime.skills.domain.Skill;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,6 +45,10 @@ public class TimeEvent {
     @NotBlank
     @DynamoDBAttribute
     private String activity;
+
+    @DynamoDBTypeConvertedJson
+    @DynamoDBAttribute
+    private List<Skill> skills;
 
     @DynamoDBAttribute
     private String note;

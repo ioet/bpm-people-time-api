@@ -1,5 +1,6 @@
 package com.ioet.bpm.peopletime.timeevents.boundaries;
 
+import com.ioet.bpm.peopletime.skills.domain.Skill;
 import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
 import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
 import com.ioet.bpm.peopletime.timeevents.services.TimeEventService;
@@ -14,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
@@ -46,7 +48,7 @@ class TimeEventControllerTest {
         return Optional.of(TimeTemplate.builder().name("foo").activity("development")
                 .organizationId("ioet-id").organizationName("ioet-name")
                 .projectId("bpm-id").projectName("bpm-name")
-                .personId(userId)
+                .personId(userId).skills(createSkillsList())
                 .id(existingTemplateId).build());
     }
 
@@ -59,9 +61,15 @@ class TimeEventControllerTest {
     private Optional<TimeEvent> buildTimeEvent(String userId) {
         return Optional.of(TimeEvent.builder().activity("development").note("did some work")
                 .organizationId("ioet-id").organizationName("ioet-name")
-                .id("someId").personId(userId)
+                .id("someId").personId(userId).skills(createSkillsList())
                 .projectId("bpm-id").projectName("bpm-name")
                 .startTime(new Date()).templateId("existingId").build());
+    }
+
+    private ArrayList<Skill> createSkillsList() {
+        ArrayList<Skill> skills = new ArrayList<>();
+        skills.add(new Skill("test-id", "test-skill"));
+        return skills;
     }
 
     private void checkIfAllTheFieldsAreTheSame(TimeTemplate template, TimeEvent event) {
@@ -72,7 +80,8 @@ class TimeEventControllerTest {
                 () -> assertEquals(template.getProjectId(), event.getProjectId()),
                 () -> assertEquals(template.getProjectName(), event.getProjectName()),
                 () -> assertEquals(template.getActivity(), event.getActivity()),
-                () -> assertEquals(template.getId(), event.getTemplateId())
+                () -> assertEquals(template.getId(), event.getTemplateId()),
+                () -> assertEquals(template.getSkills(), event.getSkills())
         );
     }
 
