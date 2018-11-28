@@ -52,7 +52,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"activity\": \"development\",\n  \"name\": \"my development template for bpm\",\n  \"organization_id\": \"ioet-id\",\n  \"organization_name\": \"ioet-name\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm-id\",\n  \"project_name\": \"bpm-name\"\n}"
+							"raw": "{\n  \"activity\": \"development2\",\n  \"name\": \"my development template for bpm\",\n  \"organization_id\": \"ioet-id\",\n  \"organization_name\": \"ioet-name\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm-id\",\n  \"project_name\": \"bpm-name\",\n  \"skills\": [\n  \t{\n  \t\t\"id\": \"some-skill-id\",\n  \t\t\"name\": \"some-skill-name\"\n  \t},\n  \t{\n  \t\t\"id\": \"some-other-skill-id\",\n  \t\t\"name\": \"some-other-skill-name\"\n  \t}\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{url}}/time-templates",
@@ -101,7 +101,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"activity\": \"testing\",\n  \"name\": \"my development template for bpm\",\n  \"organization_id\": \"ioet\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm\"\n}"
+							"raw": "{\n  \"activity\": \"testing\",\n  \"name\": \"my development template for bpm\",\n  \"organization_id\": \"ioet-id\",\n  \"organization_name\": \"ioet-name\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm-id\",\n  \"project_name\": \"bpm-name\",\n  \"skills\": [\n  \t{\n  \t\t\"id\": \"some-skill-id\",\n  \t\t\"name\": \"some-skill-name\"\n  \t},\n  \t{\n  \t\t\"id\": \"some-other-skill-id\",\n  \t\t\"name\": \"some-other-skill-name\"\n  \t}\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{url}}/time-templates/{{time-template-id}}",
@@ -471,7 +471,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"activity\": \"testing\",\n  \"organization_id\": \"ioet\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm\",\n  \"note\": \"updated note\",\n  \"template_id\": \"{{time-template-id}}\",\n  \"start_time\": \"{{2-time-event-start-time}}\"\n}\n"
+							"raw": "{\n  \"activity\": \"testing\",\n  \"organization_id\": \"ioet-id\",\n  \"organization_name\": \"ioet-name\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm-id\",\n  \"project_name\": \"bpm-name\",\n  \"note\": \"updated note\",\n  \"template_id\": \"{{time-template-id}}\",\n  \"start_time\": \"{{2-time-event-start-time}}\",\n  \"skills\": [\n  \t{\n  \t\t\"id\": \"some-skill-id\",\n  \t\t\"name\": \"some-skill-name\"\n  \t},\n  \t{\n  \t\t\"id\": \"some-other-skill-id\",\n  \t\t\"name\": \"some-other-skill-name\"\n  \t}\n  ]\n}\n"
 						},
 						"url": {
 							"raw": "{{url}}/time-events/{{2-time-event-id}}",
