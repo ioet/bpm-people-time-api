@@ -43,8 +43,11 @@ class TimeEventControllerTest {
     }
 
     private Optional<TimeTemplate> buildTimeTemplate(String existingTemplateId, String userId) {
-        return Optional.of(TimeTemplate.builder().name("foo").activity("development").organizationId("ioet")
-                .personId(userId).projectId("bpm").id(existingTemplateId).build());
+        return Optional.of(TimeTemplate.builder().name("foo").activity("development")
+                .organizationId("ioet-id").organizationName("ioet-name")
+                .projectId("bpm-id").projectName("bpm-name")
+                .personId(userId)
+                .id(existingTemplateId).build());
     }
 
     private Optional<TimeEvent> mockFindActiveTimeEventInTemplateRepository(String userId) {
@@ -54,20 +57,24 @@ class TimeEventControllerTest {
     }
 
     private Optional<TimeEvent> buildTimeEvent(String userId) {
-        return Optional.of(TimeEvent.builder().activity("development").organizationId("ioet").note("did some work")
-                .id("someId").personId(userId).projectId("bpm").startTime(new Date()).templateId("templateId").build());
+        return Optional.of(TimeEvent.builder().activity("development").note("did some work")
+                .organizationId("ioet-id").organizationName("ioet-name")
+                .id("someId").personId(userId)
+                .projectId("bpm-id").projectName("bpm-name")
+                .startTime(new Date()).templateId("existingId").build());
     }
 
     private void checkIfAllTheFieldsAreTheSame(TimeTemplate template, TimeEvent event) {
         assertAll("check that time-template and time-event contain the same information",
                 () -> assertEquals(template.getPersonId(), event.getPersonId()),
                 () -> assertEquals(template.getOrganizationId(), event.getOrganizationId()),
+                () -> assertEquals(template.getOrganizationName(), event.getOrganizationName()),
                 () -> assertEquals(template.getProjectId(), event.getProjectId()),
+                () -> assertEquals(template.getProjectName(), event.getProjectName()),
                 () -> assertEquals(template.getActivity(), event.getActivity()),
                 () -> assertEquals(template.getId(), event.getTemplateId())
         );
     }
-
 
     @Test
     void ifTheTemplateIdDoesNotExistA404IsReturned() {
@@ -105,7 +112,8 @@ class TimeEventControllerTest {
         String existingTemplateId = "existingId";
         String userId = "bar";
         Optional<TimeTemplate> timeTemplateOptional = mockFindByIdInTimeTemplateRepository(existingTemplateId, userId);
-        TimeEvent savedTimeEvent = new TimeEvent(timeTemplateOptional.get(), userId);
+
+        TimeEvent savedTimeEvent = buildTimeEvent(userId).get();
         when(timeEventService.createNewTimeEvent(any(TimeTemplate.class), anyString())).thenReturn(savedTimeEvent);
 
         ResponseEntity response = timeEventController.startTimeEvent(existingTemplateId, userId);

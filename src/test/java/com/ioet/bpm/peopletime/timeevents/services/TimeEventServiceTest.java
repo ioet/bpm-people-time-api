@@ -28,6 +28,7 @@ class TimeEventServiceTest {
     void beforeStartingANewEventTheActiveEventsIsFound() {
         String userId = "lukas";
 
+        timeEventService.init();
         timeEventService.createNewTimeEvent(mock(TimeTemplate.class), userId);
 
         verify(timeEventRepository, times(1)).findByStopTimeIsNullAndPersonId(userId);
