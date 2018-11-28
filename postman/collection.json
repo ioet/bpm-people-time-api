@@ -33,7 +33,7 @@
 									"var service_url = pm.environment.get(\"BPM_PEOPLE_TIME_URL\");",
 									"var url = service_url || \"http://localhost:8084\";",
 									"pm.globals.set(\"url\", url);",
-									"pm.globals.set(\"person_id\", \"antonio\");",
+									"pm.globals.set(\"person_id\", \"a7c759a7-190d-47e9-baf7-ed89b4de9783\");",
 									""
 								],
 								"type": "text/javascript"
@@ -52,7 +52,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"activity\": \"development\",\n  \"name\": \"my development template for bpm\",\n  \"organization_id\": \"ioet\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm\"\n}"
+							"raw": "{\n  \"activity\": \"development\",\n  \"name\": \"my development template for bpm\",\n  \"organization_id\": \"ioet-id\",\n  \"organization_name\": \"ioet-name\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm-id\",\n  \"project_name\": \"bpm-name\"\n}"
 						},
 						"url": {
 							"raw": "{{url}}/time-templates",
@@ -101,7 +101,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"activity\": \"testing\",\n  \"name\": \"my development template for bpm\",\n  \"organization_id\": \"ioet\",\n  \"person_id\": \"antonio\",\n  \"project_id\": \"bpm\"\n}"
+							"raw": "{\n  \"activity\": \"testing\",\n  \"name\": \"my development template for bpm\",\n  \"organization_id\": \"ioet\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm\"\n}"
 						},
 						"url": {
 							"raw": "{{url}}/time-templates/{{time-template-id}}",
