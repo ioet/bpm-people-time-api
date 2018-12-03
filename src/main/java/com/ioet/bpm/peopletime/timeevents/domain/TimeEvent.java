@@ -1,7 +1,7 @@
 package com.ioet.bpm.peopletime.timeevents.domain;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
+import com.ioet.bpm.peopletime.skills.domain.Skill;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,15 +26,29 @@ public class TimeEvent {
     @DynamoDBAttribute
     private String personId;
 
+    @NotBlank
     @DynamoDBAttribute
     private String organizationId;
 
     @NotBlank
     @DynamoDBAttribute
+    private String organizationName;
+
+    @NotBlank
+    @DynamoDBAttribute
     private String projectId;
 
+    @NotBlank
+    @DynamoDBAttribute
+    private String projectName;
+
+    @NotBlank
     @DynamoDBAttribute
     private String activity;
+
+    @DynamoDBTypeConvertedJson
+    @DynamoDBAttribute
+    private List<Skill> skills;
 
     @DynamoDBAttribute
     private String note;
@@ -49,11 +64,7 @@ public class TimeEvent {
     @DynamoDBAttribute
     private Date stopTime;
 
-    public TimeEvent(TimeTemplate timeTemplate, String userId) {
+    public TimeEvent(String userId) {
         this.personId = userId;
-        this.organizationId = timeTemplate.getOrganizationId();
-        this.projectId = timeTemplate.getProjectId();
-        this.activity = timeTemplate.getActivity();
-        this.templateId = timeTemplate.getId();
     }
 }
