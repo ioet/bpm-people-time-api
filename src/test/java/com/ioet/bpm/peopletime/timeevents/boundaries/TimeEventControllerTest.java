@@ -218,4 +218,17 @@ class TimeEventControllerTest {
         assertEquals(HttpStatus.OK, updatedTemplateResponse.getStatusCode());
         verify(timeEventRepository).save(eventToUpdate);
     }
+
+    @Test
+    void lastActiveTimeEventIsReturned() {
+        String id = "someid";
+        Optional<TimeEvent> lastTimeEvent = Optional.of(mock(TimeEvent.class));
+
+        when(timeEventRepository.lastActiveTimeEvent(id)).thenReturn(lastTimeEvent);
+        ResponseEntity<TimeEvent> lastActiveTimeEventResponse = timeEventController.lastActiveTimeEventForOnePerson(id);
+
+        assertEquals(lastTimeEvent.get(), lastActiveTimeEventResponse.getBody());
+        assertEquals(HttpStatus.OK, lastActiveTimeEventResponse.getStatusCode());
+
+    }
 }

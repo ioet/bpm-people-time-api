@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -36,6 +35,16 @@ public class TimeEventController {
     public ResponseEntity<Iterable> getAllTimeEventsForOnePerson(@RequestParam(value = "personId") String personId) {
         Iterable<TimeEvent> timeEvents = this.timeEventRepository.findByPersonId(personId);
         return new ResponseEntity<>(timeEvents, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Return the last active event belonging to one person", response = TimeEvent.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved last active event belonging to one person")
+    })
+    @GetMapping(path = "/last-active-event", produces = "application/json")
+    public ResponseEntity<TimeEvent> lastActiveTimeEventForOnePerson(@RequestParam(value = "personId") String personId) {
+        Optional<TimeEvent> lastActiveEvent = this.timeEventRepository.lastActiveTimeEvent(personId);
+        return new ResponseEntity<>(lastActiveEvent.get(), HttpStatus.OK);
     }
 
 

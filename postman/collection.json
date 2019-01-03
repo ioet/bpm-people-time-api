@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9ccfd952-ffad-4763-9928-ed0fd712c7a4",
+		"_postman_id": "fbb7a0d7-e8cc-4c6b-80bf-1c76a28a94cc",
 		"name": "people-time",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -189,7 +189,10 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-templates/{{time-template-id}}",
 							"host": [
@@ -293,7 +296,10 @@
 					"request": {
 						"method": "POST",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-events/start?templateId={{time-template-id}}&personId={{person_id}}",
 							"host": [
@@ -354,7 +360,10 @@
 					"request": {
 						"method": "POST",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-events/start?templateId={{time-template-id}}&personId={{person_id}}",
 							"host": [
@@ -526,7 +535,10 @@
 					"request": {
 						"method": "POST",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-events/stop?personId={{person_id}}",
 							"host": [
@@ -565,7 +577,10 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-events/{{1-time-event-id}}",
 							"host": [
@@ -598,7 +613,10 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-events/{{2-time-event-id}}",
 							"host": [
@@ -657,6 +675,57 @@
 								}
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get the last active time-event.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d2008de1-89e8-485b-82d6-5ce1db5ffe7e",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Check the id of last active time event is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id === pm.globals.get(\"2-time-event-id\"));",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/time-events/last-active-event?personId={{person_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-events",
+								"last-active-event"
+							],
+							"query": [
+								{
+									"key": "personId",
+									"value": "{{person_id}}"
+								}
+							]
+						},
+						"description": "Return the last active time-event for one user."
 					},
 					"response": []
 				}
