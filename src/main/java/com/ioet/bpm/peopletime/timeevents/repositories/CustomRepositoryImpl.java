@@ -13,7 +13,7 @@ import java.util.*;
 public class CustomRepositoryImpl implements CustomRepository {
 
     @Override
-    public Optional<TimeEvent> lastActiveTimeEvent(String personId, int top) {
+    public Optional<TimeEvent> findLastActiveTimeEvent(String personId, int top) {
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
         DynamoDBMapper mapper = new DynamoDBMapper(client);
         String actualDate = (String.valueOf(Instant.now()));

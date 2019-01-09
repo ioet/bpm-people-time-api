@@ -42,16 +42,29 @@ public class LastActiveEventServiceTest {
     }
 
     @Test
-    public void whenTheOrderByCriteriaIsNotNullThenReturnLastActiveEvent() {
+    public void whenTheOrderByCriteriaIsNotNullThenReturnLastActiveEvent(){
         String personId = "someid";
         Optional<TimeEvent> lastActiveTimeEvent = Optional.of(mock(TimeEvent.class));
+        Optional eventsFoundWhitId = Optional.of(TimeEvent.class);
 
-        doReturn(lastActiveTimeEvent).when(timeEventRepository).lastActiveTimeEvent(personId, 1);
+        doReturn(lastActiveTimeEvent).when(timeEventRepository).findLastActiveTimeEvent(personId, 1);
+        doReturn(eventsFoundWhitId).when(timeEventRepository).findById(personId);
         Iterable lastActiveTimeEventFound = lastActiveEventService.getLastActiveTimeEvents("lastActive", personId, 1);
 
         assertEquals(lastActiveTimeEvent.get(), lastActiveTimeEventFound.iterator().next());
         assertEquals(1, Iterables.size(lastActiveTimeEventFound));
-        verify(timeEventRepository).lastActiveTimeEvent(personId, 1);
+        verify(timeEventRepository).findLastActiveTimeEvent(personId, 1);
+        verify(timeEventRepository).findById(personId);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void whenThePersonIdNotExistThenReturnARuntimeException(){
+        String personId = "wrongid";
+        String orderByCriteria ="lastActive";
+
+        lastActiveEventService.getLastActiveTimeEvents(orderByCriteria, personId, 1);
+
+        verify(timeEventRepository).findLastActiveTimeEvent(personId, 1);
     }
 
     @Test(expected = RuntimeException.class)

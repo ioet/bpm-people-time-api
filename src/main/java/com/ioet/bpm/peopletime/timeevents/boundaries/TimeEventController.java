@@ -34,9 +34,9 @@ public class TimeEventController {
             @ApiResponse(code = 200, message = "Successfully retrieved all events belonging to one person")
     })
     @GetMapping(produces = "application/json")
-    public ResponseEntity<Iterable> findTimeEventsForOnePerson(@RequestParam(value = "personId") String personId,
-                                                               @RequestParam(value = "orderBy", required = false) String orderByCriteria,
-                                                               @RequestParam(value = "top") int top) {
+    public ResponseEntity<Iterable> findTimeEvents(@RequestParam(value = "personId") String personId,
+                                                   @RequestParam(value = "orderBy", required = false) String orderByCriteria,
+                                                   @RequestParam(value = "top") int top) {
         Iterable timeEvents = this.lastActiveEventService.getLastActiveTimeEvents(orderByCriteria, personId, top);
         return new ResponseEntity(timeEvents, HttpStatus.OK);
     }

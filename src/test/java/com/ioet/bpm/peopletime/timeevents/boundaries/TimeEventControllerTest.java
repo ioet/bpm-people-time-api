@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
@@ -141,7 +140,7 @@ class TimeEventControllerTest {
         Iterable<TimeEvent> timeEventsInRepository = mock(Iterable.class);
 
         doReturn(timeEventsInRepository).when(lastActiveEventService).getLastActiveTimeEvents(null, userId, 10);
-        ResponseEntity<Iterable> response = timeEventController.findTimeEventsForOnePerson(userId, null, 10);
+        ResponseEntity<Iterable> response = timeEventController.findTimeEvents(userId, null, 10);
 
         Iterable optionalIterable = response.getBody();
         assertEquals(timeEventsInRepository, optionalIterable);
@@ -229,7 +228,7 @@ class TimeEventControllerTest {
         Iterable<TimeEvent> lastTimeEvent = mock(Iterable.class);
 
         doReturn(lastTimeEvent).when(lastActiveEventService).getLastActiveTimeEvents( id,orderByCriteria, 1);
-        ResponseEntity<Iterable> lastActiveTimeEventResponse = timeEventController.findTimeEventsForOnePerson(orderByCriteria, id, 1);
+        ResponseEntity<Iterable> lastActiveTimeEventResponse = timeEventController.findTimeEvents(orderByCriteria, id, 1);
 
         assertEquals(lastTimeEvent, lastActiveTimeEventResponse.getBody());
         assertEquals(HttpStatus.OK, lastActiveTimeEventResponse.getStatusCode());

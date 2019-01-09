@@ -5,6 +5,7 @@ import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -15,9 +16,15 @@ public class LastActiveEventService {
         if (orderByCriteria == null) {
             return this.timeEventRepository.findByPersonId(personId);
         } else if ("lastActive".equals(orderByCriteria)) {
-            ArrayList<TimeEvent> lastActiveTimeEvent = new ArrayList<>();
-            lastActiveTimeEvent.add(this.timeEventRepository.lastActiveTimeEvent(personId, top).get());
-            return lastActiveTimeEvent;
+            Optional eventsFoundWhitId = this.timeEventRepository.findById(personId);
+            if (eventsFoundWhitId.isPresent()) {
+                ArrayList<TimeEvent> lastActiveTimeEvent = new ArrayList<>();
+                lastActiveTimeEvent.add(this.timeEventRepository.findLastActiveTimeEvent(personId, top).get());
+                return lastActiveTimeEvent;
+            } else {
+                throw new RuntimeException("No person found whit the provided ID");
+            }
+
         } else {
             throw new RuntimeException("Provide orderBy criteria not supported");
         }
