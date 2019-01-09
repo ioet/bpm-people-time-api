@@ -34,7 +34,8 @@
 									"var url = service_url || \"http://localhost:8084\";",
 									"pm.globals.set(\"url\", url);",
 									"pm.globals.set(\"person_id\", \"a7c759a7-190d-47e9-baf7-ed89b4de9783\");",
-									""
+									"pm.globals.set(\"order_by\", \"lastActive\");",
+									"pm.globals.set(\"orderBy\", \"lastActive\");"
 								],
 								"type": "text/javascript"
 							}
@@ -350,7 +351,7 @@
 									"    pm.expect(jsonData.stop_time).to.eql(null);",
 									"});",
 									"",
-									"pm.globals.set(\"2-time-event-id\", pm.response.json().id);",
+									"pm.globals.set(\"last-time-event-created-id\", pm.response.json().id);",
 									"pm.globals.set(\"2-time-event-start-time\", pm.response.json().start_time);"
 								],
 								"type": "text/javascript"
@@ -412,7 +413,7 @@
 									"",
 									"pm.test(\"Check that second event has stop_time = null\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    var event = jsonData.filter(e => e.id === pm.globals.get(\"2-time-event-id\"))[0];",
+									"    var event = jsonData.filter(e => e.id === pm.globals.get(\"last-time-event-created-id\"))[0];",
 									"    pm.expect(event.stop_time).to.eql(null);",
 									"});",
 									""
@@ -429,7 +430,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/time-events?personId={{person_id}}",
+							"raw": "{{url}}/time-events?personId={{person_id}}&top=10",
 							"host": [
 								"{{url}}"
 							],
@@ -440,6 +441,10 @@
 								{
 									"key": "personId",
 									"value": "{{person_id}}"
+								},
+								{
+									"key": "top",
+									"value": "10"
 								}
 							]
 						}
@@ -483,13 +488,13 @@
 							"raw": "{\n  \"activity\": \"testing\",\n  \"organization_id\": \"ioet-id\",\n  \"organization_name\": \"ioet-name\",\n  \"person_id\": \"{{person_id}}\",\n  \"project_id\": \"bpm-id\",\n  \"project_name\": \"bpm-name\",\n  \"note\": \"updated note\",\n  \"template_id\": \"{{time-template-id}}\",\n  \"start_time\": \"{{2-time-event-start-time}}\",\n  \"skills\": [\n  \t{\n  \t\t\"id\": \"some-skill-id\",\n  \t\t\"name\": \"some-skill-name\"\n  \t},\n  \t{\n  \t\t\"id\": \"some-other-skill-id\",\n  \t\t\"name\": \"some-other-skill-name\"\n  \t}\n  ]\n}\n"
 						},
 						"url": {
-							"raw": "{{url}}/time-events/{{2-time-event-id}}",
+							"raw": "{{url}}/time-events/{{last-time-event-created-id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"time-events",
-								"{{2-time-event-id}}"
+								"{{last-time-event-created-id}}"
 							]
 						}
 					},
@@ -514,7 +519,7 @@
 									"",
 									"pm.test(\"Time-event-id is correct\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.id).to.eql(pm.globals.get(\"2-time-event-id\"));",
+									"    pm.expect(jsonData.id).to.eql(pm.globals.get(\"last-time-event-created-id\"));",
 									"});",
 									"",
 									"pm.test(\"Start_time is not null\", function () {",
@@ -618,13 +623,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/time-events/{{2-time-event-id}}",
+							"raw": "{{url}}/time-events/{{last-time-event-created-id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"time-events",
-								"{{2-time-event-id}}"
+								"{{last-time-event-created-id}}"
 							]
 						}
 					},
@@ -661,7 +666,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/time-events?personId={{person_id}}",
+							"raw": "{{url}}/time-events?personId={{person_id}}&top=10",
 							"host": [
 								"{{url}}"
 							],
@@ -672,6 +677,10 @@
 								{
 									"key": "personId",
 									"value": "{{person_id}}"
+								},
+								{
+									"key": "top",
+									"value": "10"
 								}
 							]
 						}
@@ -686,6 +695,8 @@
 							"script": {
 								"id": "d2008de1-89e8-485b-82d6-5ce1db5ffe7e",
 								"exec": [
+									"",
+									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
@@ -693,9 +704,19 @@
 									"",
 									"pm.test(\"Check the id of last active time event is correct\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.id === pm.globals.get(\"2-time-event-id\"));",
+									"    pm.expect(jsonData.id === pm.globals.get(\"last-time-event-created-id\"));",
 									"});",
 									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6aaed0a9-e818-4760-ae55-bdfc9420f272",
+								"exec": [
 									""
 								],
 								"type": "text/javascript"
@@ -710,22 +731,87 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/time-events/last-active-event?personId={{person_id}}",
+							"raw": "{{url}}/time-events/?top=1&personId={{person_id}}&orderBy={{order_by}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"time-events",
-								"last-active-event"
+								""
 							],
 							"query": [
 								{
+									"key": "top",
+									"value": "1"
+								},
+								{
 									"key": "personId",
 									"value": "{{person_id}}"
+								},
+								{
+									"key": "orderBy",
+									"value": "{{order_by}}"
 								}
 							]
 						},
 						"description": "Return the last active time-event for one user."
+					},
+					"response": []
+				},
+				{
+					"name": "Bad Criteria Return an Exception.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e00b494d-69bf-4e6c-8d10-70dc8fe59cc1",
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {",
+									"    pm.response.to.have.status(500);",
+									"});",
+									"",
+									"",
+									"",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Provide orderBy criteria not supported\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/time-events/?top=1&personId={{person_id}}&orderBy=ErrorCriteria",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"time-events",
+								""
+							],
+							"query": [
+								{
+									"key": "top",
+									"value": "1"
+								},
+								{
+									"key": "personId",
+									"value": "{{person_id}}"
+								},
+								{
+									"key": "orderBy",
+									"value": "ErrorCriteria"
+								}
+							]
+						},
+						"description": "If you put incorrect criteria the response is 500."
 					},
 					"response": []
 				}
