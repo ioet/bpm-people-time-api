@@ -3,18 +3,18 @@ package com.ioet.bpm.peopletime.timeevents.boundaries;
 import com.ioet.bpm.peopletime.skills.domain.Skill;
 import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
 import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
+import com.ioet.bpm.peopletime.timeevents.services.LastActiveEventService;
 import com.ioet.bpm.peopletime.timeevents.services.TimeEventService;
 import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
 import com.ioet.bpm.peopletime.timetemplates.repositories.TimeTemplateRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
@@ -36,6 +36,9 @@ class TimeEventControllerTest {
 
     @Mock
     TimeEventService timeEventService;
+
+    @Mock
+    LastActiveEventService lastActiveEventService;
 
 
     private Optional<TimeTemplate> mockFindByIdInTimeTemplateRepository(String existingTemplateId, String userId) {
@@ -136,14 +139,14 @@ class TimeEventControllerTest {
     void whenAllEventsForOnePersonAreRequestedA200WithOnlyTheseEventsAreReturned() {
         String userId = "someUserId";
         Iterable<TimeEvent> timeEventsInRepository = mock(Iterable.class);
-        when(timeEventRepository.findByPersonId(userId)).thenReturn(timeEventsInRepository);
 
-        ResponseEntity<Iterable> response = timeEventController.getAllTimeEventsForOnePerson(userId);
+        doReturn(timeEventsInRepository).when(lastActiveEventService).getLastActiveTimeEvents(null, userId, 10);
+        ResponseEntity<Iterable> response = timeEventController.findTimeEventsForOnePerson(userId, null, 10);
 
-        Iterable<TimeEvent> timeEvents = response.getBody();
-        assertEquals(timeEventsInRepository, timeEvents);
+        Iterable optionalIterable = response.getBody();
+        assertEquals(timeEventsInRepository, optionalIterable);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(timeEventRepository).findByPersonId(userId);
+        verify(lastActiveEventService).getLastActiveTimeEvents(null, userId, 10);
     }
 
     @Test
@@ -222,12 +225,13 @@ class TimeEventControllerTest {
     @Test
     void lastActiveTimeEventIsReturned() {
         String id = "someid";
-        Optional<TimeEvent> lastTimeEvent = Optional.of(mock(TimeEvent.class));
+        String orderByCriteria = "lastActive";
+        Iterable<TimeEvent> lastTimeEvent = mock(Iterable.class);
 
-        when(timeEventRepository.lastActiveTimeEvent(id)).thenReturn(lastTimeEvent);
-        ResponseEntity<TimeEvent> lastActiveTimeEventResponse = timeEventController.lastActiveTimeEventForOnePerson(id);
+        doReturn(lastTimeEvent).when(lastActiveEventService).getLastActiveTimeEvents( id,orderByCriteria, 1);
+        ResponseEntity<Iterable> lastActiveTimeEventResponse = timeEventController.findTimeEventsForOnePerson(orderByCriteria, id, 1);
 
-        assertEquals(lastTimeEvent.get(), lastActiveTimeEventResponse.getBody());
+        assertEquals(lastTimeEvent, lastActiveTimeEventResponse.getBody());
         assertEquals(HttpStatus.OK, lastActiveTimeEventResponse.getStatusCode());
 
     }
