@@ -7,46 +7,7 @@
 
 ## Run it locally
 
-First run this to start eureka and edge server
-```
-docker-compose up
-```
-Then start the people-time-api using your IDE or this command
-```
-./gradlew bootRun
-```
-
-## Swagger
-
-Swagger is integrated and available in this URL:
-
-```
-http://IP_ADDRESS:PORT/swagger-ui.html
-```
-
-## Postman
-There is a Postman Collection included to test the api.  
-You can run it with newman with this command:
-```
-newman run postman/collection.json -e postman/env.json
-```
-
-## Docker
-
-The project has integrated a docker plugin so you can generate a docker image using the following Gradle task:
-
-```
-$ ./gradlew build docker
-```
-
-Don't forget to pass the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to make it work locally.
-For any other environment the credentials should be provided by the CI server.
-
-
-
-## Dynamo
-
-In order to make the API works and establish a connection with Dynamo (Cloud DB provided by AWS) you'll need to export the following environment variables:
+Set up your own credentials to be able to connect to dependent AWS services:
 
 ```
 export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY"
@@ -54,8 +15,37 @@ export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_KEY"
 export AWS_REGION="us-east-1"
 ```
 
-If you don't have AWS Credentials, feel free to ask Juan Garcia, Roland or Rene Enriquez for it. Your account needs to be part of the group bpm-people to have enough permission to access Dynamo tables which are part of this project. 
 
+Then start the people-time-api using your IDE or this command
+```
+./gradlew bootRun
+```
+
+
+And you can access the people-time-api and it's swagger here: 
+```
+http://localhost:8084/people-time
+http://localhost:8084/swagger-ui.html
+```
+
+## Postman
+There is a Postman Collection included to test the api.  
+Install Newman in your machine
+```
+$ npm install -g newman
+```
+
+You can run it with newman with this command:
+```
+newman run postman/collection.json -e postman/env.json
+```
+
+## Playing with the API 
+Query time-templates
+
+```
+curl -X GET http://localhost:8084/time-templates?personId=a7c759a7-190d-47e9-baf7-ed89b4de9783
+```
 
 ## Configuring IntelliJ IDE
 If you want to run the application from IntelliJ you must configure the required environment variables following the next steps:
@@ -72,4 +62,34 @@ Run or Debug
 
 ```
 Now, you can run or debug the app from IntelliJ, you can use JRbel to debug and redeploy the app.
+```
+
+## Deploying as Lambda
+
+### Create a S3 bucket
+```
+aws s3 mb s3://cf-template-spring-boot-apps-as-lambda
+```
+
+### Generate the bundle
+Generate the artifact containing the code
+```
+./gradlew buildZip
+```
+
+### Package the CouldFormation template
+```
+aws cloudformation package --template-file sam-people-time-api.yml --output-template-file output-sam-people-time-api.yml --s3-bucket cf-template-spring-boot-apps-as-lambda --s3-prefix people-time-api
+```
+
+### Deploy the code as lambda
+
+- Deploy the code to AWS
+```
+aws cloudformation deploy --template-file output-sam-people-time-api.yml --stack-name bpm-people-time-api --capabilities CAPABILITY_IAM
+```
+
+- Get the URL
+```
+aws cloudformation describe-stacks --stack-name bpm-people-time-api
 ```
