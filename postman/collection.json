@@ -431,7 +431,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/time-events?personId={{person_id}}&top=1",
+							"raw": "{{url}}/time-events?personId={{person_id}}",
 							"host": [
 								"{{url}}"
 							],
@@ -442,10 +442,6 @@
 								{
 									"key": "personId",
 									"value": "{{person_id}}"
-								},
-								{
-									"key": "top",
-									"value": "1"
 								}
 							]
 						}
@@ -667,7 +663,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/time-events?personId={{person_id}}&top=1",
+							"raw": "{{url}}/time-events?personId={{person_id}}",
 							"host": [
 								"{{url}}"
 							],
@@ -678,10 +674,6 @@
 								{
 									"key": "personId",
 									"value": "{{person_id}}"
-								},
-								{
-									"key": "top",
-									"value": "1"
 								}
 							]
 						}
