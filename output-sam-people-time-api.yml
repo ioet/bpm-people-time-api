@@ -6,7 +6,7 @@ Outputs:
     Export:
       Name: PeopleTimeApi
     Value:
-      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Stage/people-time
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Stage
 Resources:
   PeopleTimeApiLambda:
     Properties:
@@ -17,7 +17,7 @@ Resources:
             Method: any
             Path: /{proxy+}
           Type: Api
-      Handler: com.ioet.bpm.people-time.aws.handler.AwsLambdaHandler::handleRequest
+      Handler: com.ioet.bpm.peopletime.aws.handler.AwsLambdaHandler::handleRequest
       MemorySize: 1512
       Role: arn:aws:iam::524819651720:role/API-lambda-deployment
       Runtime: java8

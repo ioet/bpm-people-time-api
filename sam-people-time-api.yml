@@ -7,7 +7,7 @@ Resources:
   PeopleTimeApiLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: com.ioet.bpm.people-time.aws.handler.AwsLambdaHandler::handleRequest
+      Handler: com.ioet.bpm.peopletime.aws.handler.AwsLambdaHandler::handleRequest
       Runtime: java8
       CodeUri: build/distributions/bpm-people-time-api-0.0.1.zip
       MemorySize: 1512
@@ -23,6 +23,6 @@ Resources:
 Outputs:
   PeopleTimeApi:
     Description: URL for application
-    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Stage/people-time'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Stage'
     Export:
       Name: PeopleTimeApi
