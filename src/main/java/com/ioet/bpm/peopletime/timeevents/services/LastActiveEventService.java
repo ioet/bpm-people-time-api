@@ -17,13 +17,14 @@ public class LastActiveEventService {
         if (orderByCriteria == null) {
             return this.timeEventRepository.findByPersonId(personId);
         } else if ("lastActive".equals(orderByCriteria)) {
-            Optional eventsFoundWhitId = this.timeEventRepository.findById(personId);
-            if (eventsFoundWhitId.isPresent()) {
+            Optional eventsFoundWithId = this.timeEventRepository.findById(personId);
+            if (eventsFoundWithId.isPresent()) {
                 ArrayList<TimeEvent> lastActiveTimeEvent = new ArrayList<>();
                 if (top == null) {
                     top = 1;
                 }
-                lastActiveTimeEvent.add(this.timeEventRepository.findLastActiveTimeEvent(personId, top).get());
+                Optional<TimeEvent> timeEvent = this.timeEventRepository.findLastActiveTimeEvent(personId, top);
+                timeEvent.ifPresent(lastActiveTimeEvent::add);
                 return lastActiveTimeEvent;
             } else {
                 throw new RuntimeException("No person found whit the provided ID");

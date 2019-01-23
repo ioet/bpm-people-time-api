@@ -3,22 +3,17 @@ package com.ioet.bpm.peopletime.timeevents.services;
 import com.google.common.collect.Iterables;
 import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
 import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
-
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
 public class LastActiveEventServiceTest {
 
@@ -39,6 +34,16 @@ public class LastActiveEventServiceTest {
 
         assertEquals(lastActiveTimeEvent, lastActiveTimeEventFound);
         verify(timeEventRepository).findByPersonId(personId);
+    }
+
+    @Test
+    public void whenTopIsNull1IsUsed() {
+        String personId = "someid";
+        when(timeEventRepository.findById(personId)).thenReturn(Optional.of(new TimeEvent()));
+
+        lastActiveEventService.getLastActiveTimeEvents("lastActive", personId, null);
+
+        verify(timeEventRepository).findLastActiveTimeEvent(personId, 1);
     }
 
     @Test
