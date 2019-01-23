@@ -1,6 +1,7 @@
 package com.ioet.bpm.peopletime.timeevents.boundaries;
 
 import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
+import com.ioet.bpm.peopletime.timeevents.services.LastActiveEventService;
 import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
 import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
 import com.ioet.bpm.peopletime.timetemplates.repositories.TimeTemplateRepository;
@@ -13,7 +14,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -26,6 +26,7 @@ public class TimeEventController {
     private final TimeEventRepository timeEventRepository;
     private final TimeTemplateRepository timeTemplateRepository;
     private final TimeEventService timeEventService;
+    private final LastActiveEventService lastActiveEventService;
 
 
     @ApiOperation(value = "Return a list of all events belonging to one person", response = TimeEvent.class, responseContainer = "List")
@@ -33,9 +34,11 @@ public class TimeEventController {
             @ApiResponse(code = 200, message = "Successfully retrieved all events belonging to one person")
     })
     @GetMapping(produces = "application/json")
-    public ResponseEntity<Iterable> getAllTimeEventsForOnePerson(@RequestParam(value = "personId") String personId) {
-        Iterable<TimeEvent> timeEvents = this.timeEventRepository.findByPersonId(personId);
-        return new ResponseEntity<>(timeEvents, HttpStatus.OK);
+    public ResponseEntity<Iterable> findTimeEvents(@RequestParam(value = "personId") String personId,
+                                                   @RequestParam(value = "orderBy", required = false) String orderByCriteria,
+                                                   @RequestParam(value = "top", required = false) Integer top) {
+        Iterable timeEvents = this.lastActiveEventService.getLastActiveTimeEvents(orderByCriteria, personId, top);
+        return new ResponseEntity(timeEvents, HttpStatus.OK);
     }
 
 

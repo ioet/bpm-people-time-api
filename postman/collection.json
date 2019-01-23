@@ -1,12 +1,13 @@
 {
 	"info": {
-		"_postman_id": "44805710-5a13-4664-9f3b-467ead6b0ab3",
+		"_postman_id": "9aff74e3-2fa6-44d3-90bf-8c7f95fddae8",
 		"name": "people-time",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "time-templates",
+			"description": null,
 			"item": [
 				{
 					"name": "Create time-template",
@@ -258,6 +259,7 @@
 		},
 		{
 			"name": "time-events",
+			"description": null,
 			"item": [
 				{
 					"name": "Start a time-event",

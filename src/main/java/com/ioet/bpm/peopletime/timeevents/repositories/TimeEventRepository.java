@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 @EnableScan
-public interface TimeEventRepository extends CrudRepository<TimeEvent, String> {
+public interface TimeEventRepository extends CrudRepository<TimeEvent, String>, CustomRepository {
 
     Iterable<TimeEvent> findByPersonId(String personId);
 
