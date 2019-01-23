@@ -1,6 +1,10 @@
 {
 	"info": {
+<<<<<<< HEAD
 		"_postman_id": "fbb7a0d7-e8cc-4c6b-80bf-1c76a28a94cc",
+=======
+		"_postman_id": "44805710-5a13-4664-9f3b-467ead6b0ab3",
+>>>>>>> master
 		"name": "people-time",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -33,9 +37,14 @@
 									"var service_url = pm.environment.get(\"BPM_PEOPLE_TIME_URL\");",
 									"var url = service_url || \"http://localhost:8084\";",
 									"pm.globals.set(\"url\", url);",
+<<<<<<< HEAD
 									"pm.globals.set(\"person_id\", \"a7c759a7-190d-47e9-baf7-ed89b4de9783\");",
 									"pm.globals.set(\"order_by\", \"lastActive\");",
 									"pm.globals.set(\"orderBy\", \"lastActive\");"
+=======
+									"pm.globals.set(\"person_id\", \"not-existing-id\");",
+									""
+>>>>>>> master
 								],
 								"type": "text/javascript"
 							}

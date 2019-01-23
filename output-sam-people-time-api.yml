@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: BpmPeopleTime
+Outputs:
+  PeopleTimeApi:
+    Description: URL for application
+    Export:
+      Name: PeopleTimeApi
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Stage
+Resources:
+  PeopleTimeApiLambda:
+    Properties:
+      CodeUri: s3://cf-template-spring-boot-apps-as-lambda/people-time-api/683b44d9664e080ef8a6fa670711db2a
+      Events:
+        GetResource:
+          Properties:
+            Method: any
+            Path: /{proxy+}
+          Type: Api
+      Handler: com.ioet.bpm.peopletime.aws.handler.AwsLambdaHandler::handleRequest
+      MemorySize: 1512
+      Role: arn:aws:iam::524819651720:role/API-lambda-deployment
+      Runtime: java8
+      Timeout: 60
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
