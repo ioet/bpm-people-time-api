@@ -64,6 +64,7 @@ dependencyManagement {
 
 test {
     dependsOn 'cleanTest'
+    useJUnitPlatform()
     jacoco {
         excludes += [
                 '**/config/**',
