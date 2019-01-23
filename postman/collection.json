@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9ccfd952-ffad-4763-9928-ed0fd712c7a4",
+		"_postman_id": "44805710-5a13-4664-9f3b-467ead6b0ab3",
 		"name": "people-time",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -33,7 +33,7 @@
 									"var service_url = pm.environment.get(\"BPM_PEOPLE_TIME_URL\");",
 									"var url = service_url || \"http://localhost:8084\";",
 									"pm.globals.set(\"url\", url);",
-									"pm.globals.set(\"person_id\", \"a7c759a7-190d-47e9-baf7-ed89b4de9783\");",
+									"pm.globals.set(\"person_id\", \"not-existing-id\");",
 									""
 								],
 								"type": "text/javascript"
@@ -189,7 +189,10 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-templates/{{time-template-id}}",
 							"host": [
@@ -293,7 +296,10 @@
 					"request": {
 						"method": "POST",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-events/start?templateId={{time-template-id}}&personId={{person_id}}",
 							"host": [
@@ -354,7 +360,10 @@
 					"request": {
 						"method": "POST",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-events/start?templateId={{time-template-id}}&personId={{person_id}}",
 							"host": [
@@ -526,7 +535,10 @@
 					"request": {
 						"method": "POST",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-events/stop?personId={{person_id}}",
 							"host": [
@@ -565,7 +577,10 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-events/{{1-time-event-id}}",
 							"host": [
@@ -598,7 +613,10 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/time-events/{{2-time-event-id}}",
 							"host": [
