@@ -10,7 +10,7 @@ Outputs:
 Resources:
   PeopleTimeApiLambda:
     Properties:
-      CodeUri: s3://cf-template-spring-boot-apps-as-lambda/people-time-api/683b44d9664e080ef8a6fa670711db2a
+      CodeUri: s3://cf-template-spring-boot-apps-as-lambda/people-time-api/7f1e6e9f9f1f790bdf9c7034b4fa73e7
       Events:
         GetResource:
           Properties:
