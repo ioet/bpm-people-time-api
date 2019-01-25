@@ -17,19 +17,13 @@ public class LastActiveEventService {
         if (orderByCriteria == null) {
             return this.timeEventRepository.findByPersonId(personId);
         } else if ("lastActive".equals(orderByCriteria)) {
-            Optional eventsFoundWithId = this.timeEventRepository.findById(personId);
-            if (eventsFoundWithId.isPresent()) {
-                ArrayList<TimeEvent> lastActiveTimeEvent = new ArrayList<>();
-                if (top == null) {
-                    top = 1;
-                }
-                Optional<TimeEvent> timeEvent = this.timeEventRepository.findLastActiveTimeEvent(personId, top);
-                timeEvent.ifPresent(lastActiveTimeEvent::add);
-                return lastActiveTimeEvent;
-            } else {
-                throw new RuntimeException("No person found whit the provided ID");
+            ArrayList<TimeEvent> lastActiveTimeEvent = new ArrayList<>();
+            if (top == null) {
+                top = 1;
             }
-
+            Optional<TimeEvent> timeEvent = this.timeEventRepository.findLastActiveTimeEvent(personId, top);
+            timeEvent.ifPresent(lastActiveTimeEvent::add);
+            return lastActiveTimeEvent;
         } else {
             throw new RuntimeException("Provide orderBy criteria not supported");
         }
