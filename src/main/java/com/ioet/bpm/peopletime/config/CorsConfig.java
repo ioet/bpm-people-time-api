@@ -1,16 +1,30 @@
 package com.ioet.bpm.peopletime.config;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-@Configuration
-@EnableWebMvc
-public class CorsConfig implements WebMvcConfigurer {
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@Component
+public class CorsConfig extends OncePerRequestFilter {
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+
+        if ("OPTIONS".equals(request.getMethod())) {
+            response.setHeader("Access-Control-Allow-Headers", "origin, authorization, accept, content-type, x-requested-with");
+            response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS");
+        } else if (!response.isCommitted()) {
+            try {
+                chain.doFilter(request, response);
+            } catch (IOException | ServletException e) {
+                logger.error("An error occurred", e);
+            }
+        }
     }
 }
