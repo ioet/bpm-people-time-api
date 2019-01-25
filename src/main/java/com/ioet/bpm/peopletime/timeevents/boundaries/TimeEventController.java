@@ -35,9 +35,8 @@ public class TimeEventController {
     })
     @GetMapping(produces = "application/json")
     public ResponseEntity<Iterable> findTimeEvents(@RequestParam(value = "personId") String personId,
-                                                   @RequestParam(value = "orderBy", required = false) String orderByCriteria,
-                                                   @RequestParam(value = "top", required = false) Integer top) {
-        Iterable timeEvents = this.lastActiveEventService.getLastActiveTimeEvents(orderByCriteria, personId, top);
+                                                   @RequestParam(value = "lastActive", required = false) boolean lastActive) {
+        Iterable timeEvents = this.lastActiveEventService.getLastActiveTimeEvents(personId, lastActive);
         return new ResponseEntity(timeEvents, HttpStatus.OK);
     }
 

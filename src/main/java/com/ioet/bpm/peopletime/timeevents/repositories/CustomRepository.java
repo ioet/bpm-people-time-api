@@ -5,6 +5,6 @@ import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
 import java.util.Optional;
 
 public interface CustomRepository {
-    Optional<TimeEvent> findLastActiveTimeEvent(String personId, int top);
+    Optional<TimeEvent> findLastActiveTimeEvent(String personId);
 }
 

@@ -13,7 +13,7 @@ import java.util.*;
 public class CustomRepositoryImpl implements CustomRepository {
 
     @Override
-    public Optional<TimeEvent> findLastActiveTimeEvent(String personId, int top) {
+    public Optional<TimeEvent> findLastActiveTimeEvent(String personId) {
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
         DynamoDBMapper mapper = new DynamoDBMapper(client);
         String actualDate = (String.valueOf(Instant.now()));
@@ -21,13 +21,12 @@ public class CustomRepositoryImpl implements CustomRepository {
         attributeNames.put("#personId", "personId");
         attributeNames.put("#startTime", "startTime");
         Map<String, AttributeValue> attributeValues = new HashMap<>();
-        attributeValues.put(":personid", new AttributeValue().withS(personId));
+        attributeValues.put(":personId", new AttributeValue().withS(personId));
         attributeValues.put(":actualDate", new AttributeValue().withS(actualDate));
 
         DynamoDBQueryExpression dynamoDBQueryExpression = new DynamoDBQueryExpression()
-                .withKeyConditionExpression("#personId = :personid and #startTime < :actualDate")
+                .withKeyConditionExpression("#personId = :personId and #startTime < :actualDate")
                 .withConsistentRead(false)
-                .withLimit(top)
                 .withScanIndexForward(false)
                 .withIndexName("personId-startTime-index")
                 .withExpressionAttributeNames(attributeNames)

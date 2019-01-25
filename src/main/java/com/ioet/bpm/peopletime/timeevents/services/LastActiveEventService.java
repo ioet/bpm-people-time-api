@@ -13,20 +13,14 @@ import java.util.Optional;
 public class LastActiveEventService {
     private final TimeEventRepository timeEventRepository;
 
-    public Iterable<?> getLastActiveTimeEvents(String orderByCriteria, String personId, Integer top) {
-        if (orderByCriteria == null) {
-            return this.timeEventRepository.findByPersonId(personId);
-        } else if ("lastActive".equals(orderByCriteria)) {
+    public Iterable<?> getLastActiveTimeEvents(String personId, boolean lastActive) {
+        if (lastActive) {
             ArrayList<TimeEvent> lastActiveTimeEvent = new ArrayList<>();
-            if (top == null) {
-                top = 1;
-            }
-            Optional<TimeEvent> timeEvent = this.timeEventRepository.findLastActiveTimeEvent(personId, top);
+            Optional<TimeEvent> timeEvent = this.timeEventRepository.findLastActiveTimeEvent(personId);
             timeEvent.ifPresent(lastActiveTimeEvent::add);
             return lastActiveTimeEvent;
         } else {
-            throw new RuntimeException("Provide orderBy criteria not supported");
+            return timeEventRepository.findByPersonId(personId);
         }
-
     }
 }
