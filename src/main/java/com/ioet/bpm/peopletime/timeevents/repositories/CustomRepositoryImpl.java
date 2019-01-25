@@ -13,7 +13,7 @@ import java.util.*;
 public class CustomRepositoryImpl implements CustomRepository {
 
     @Override
-    public Optional<TimeEvent> findLastActiveTimeEvent(String personId) {
+    public Iterable<TimeEvent> findLastActiveTimeEvent(String personId) {
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
         DynamoDBMapper mapper = new DynamoDBMapper(client);
         String actualDate = (String.valueOf(Instant.now()));
@@ -33,6 +33,8 @@ public class CustomRepositoryImpl implements CustomRepository {
                 .withExpressionAttributeValues(attributeValues);
 
         List<TimeEvent> timeEventsList = mapper.query(TimeEvent.class, dynamoDBQueryExpression);
-        return Optional.of(timeEventsList.get(0));
+        ArrayList<TimeEvent> singleEntry = new ArrayList<>();
+        singleEntry.add(timeEventsList.get(0));
+        return singleEntry;
     }
 }

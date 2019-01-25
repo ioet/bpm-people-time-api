@@ -3,13 +3,14 @@ package com.ioet.bpm.peopletime.timeevents.boundaries;
 import com.ioet.bpm.peopletime.skills.domain.Skill;
 import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
 import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
-import com.ioet.bpm.peopletime.timeevents.services.LastActiveEventService;
 import com.ioet.bpm.peopletime.timeevents.services.TimeEventService;
 import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
 import com.ioet.bpm.peopletime.timetemplates.repositories.TimeTemplateRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +36,6 @@ class TimeEventControllerTest {
 
     @Mock
     TimeEventService timeEventService;
-
-    @Mock
-    LastActiveEventService lastActiveEventService;
-
 
     private Optional<TimeTemplate> mockFindByIdInTimeTemplateRepository(String existingTemplateId, String userId) {
         Optional<TimeTemplate> timeTemplateOptional = buildTimeTemplate(existingTemplateId, userId);
@@ -139,13 +136,13 @@ class TimeEventControllerTest {
         String userId = "someUserId";
         Iterable<TimeEvent> timeEventsInRepository = mock(Iterable.class);
 
-        doReturn(timeEventsInRepository).when(lastActiveEventService).getLastActiveTimeEvents(null, userId, 10);
-        ResponseEntity<Iterable> response = timeEventController.findTimeEvents(userId, null, 10);
+        doReturn(timeEventsInRepository).when(timeEventService).getLastActiveTimeEvents(userId, false);
+        ResponseEntity<Iterable> response = timeEventController.findTimeEvents(userId, false);
 
         Iterable optionalIterable = response.getBody();
         assertEquals(timeEventsInRepository, optionalIterable);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(lastActiveEventService).getLastActiveTimeEvents(null, userId, 10);
+        verify(timeEventService).getLastActiveTimeEvents(userId, false);
     }
 
     @Test
@@ -224,11 +221,10 @@ class TimeEventControllerTest {
     @Test
     void lastActiveTimeEventIsReturned() {
         String id = "someid";
-        String orderByCriteria = "lastActive";
         Iterable<TimeEvent> lastTimeEvent = mock(Iterable.class);
 
-        doReturn(lastTimeEvent).when(lastActiveEventService).getLastActiveTimeEvents( id,orderByCriteria, 1);
-        ResponseEntity<Iterable> lastActiveTimeEventResponse = timeEventController.findTimeEvents(orderByCriteria, id, 1);
+        doReturn(lastTimeEvent).when(timeEventService).getLastActiveTimeEvents(id, true);
+        ResponseEntity<Iterable> lastActiveTimeEventResponse = timeEventController.findTimeEvents(id, true);
 
         assertEquals(lastTimeEvent, lastActiveTimeEventResponse.getBody());
         assertEquals(HttpStatus.OK, lastActiveTimeEventResponse.getStatusCode());
