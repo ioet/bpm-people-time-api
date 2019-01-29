@@ -10,6 +10,7 @@ import org.dozer.loader.api.TypeMappingOptions;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
@@ -50,5 +51,15 @@ public class TimeEventService {
     public TimeEvent saveStopTimeToTimeEvent(TimeEvent timeEventToStop) {
         timeEventToStop.setStopTime(new Date());
         return timeEventRepository.save(timeEventToStop);
+    }
+
+    public Iterable<?> getLastActiveTimeEvents(String personId, boolean lastActive) {
+        Iterable<TimeEvent> response;
+        if (lastActive) {
+            response = timeEventRepository.findLastActiveTimeEvent(personId);
+        } else {
+            response = timeEventRepository.findByPersonId(personId);
+        }
+        return response;
     }
 }

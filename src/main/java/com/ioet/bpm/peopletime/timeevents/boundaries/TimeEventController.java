@@ -1,11 +1,10 @@
 package com.ioet.bpm.peopletime.timeevents.boundaries;
 
 import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
-import com.ioet.bpm.peopletime.timeevents.services.LastActiveEventService;
-import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
 import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
-import com.ioet.bpm.peopletime.timetemplates.repositories.TimeTemplateRepository;
 import com.ioet.bpm.peopletime.timeevents.services.TimeEventService;
+import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
+import com.ioet.bpm.peopletime.timetemplates.repositories.TimeTemplateRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -14,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -26,7 +26,6 @@ public class TimeEventController {
     private final TimeEventRepository timeEventRepository;
     private final TimeTemplateRepository timeTemplateRepository;
     private final TimeEventService timeEventService;
-    private final LastActiveEventService lastActiveEventService;
 
 
     @ApiOperation(value = "Return a list of all events belonging to one person", response = TimeEvent.class, responseContainer = "List")
@@ -35,9 +34,8 @@ public class TimeEventController {
     })
     @GetMapping(produces = "application/json")
     public ResponseEntity<Iterable> findTimeEvents(@RequestParam(value = "personId") String personId,
-                                                   @RequestParam(value = "orderBy", required = false) String orderByCriteria,
-                                                   @RequestParam(value = "top", required = false) Integer top) {
-        Iterable timeEvents = this.lastActiveEventService.getLastActiveTimeEvents(orderByCriteria, personId, top);
+                                                   @RequestParam(value = "lastActive", required = false) boolean lastActive) {
+        Iterable timeEvents = timeEventService.getLastActiveTimeEvents(personId, lastActive);
         return new ResponseEntity(timeEvents, HttpStatus.OK);
     }
 
