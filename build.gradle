@@ -69,7 +69,8 @@ test {
         excludes += [
                 '**/config/**',
                 '**/BpmPeopleTimeApiApplication.class',
-                '**/aws/**'
+                '**/aws/**',
+                '**/**/domain/**'
         ]
     }
 }
@@ -81,7 +82,8 @@ jacocoTestReport {
     }
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['**/config/**', '**/BpmPeopleTimeApiApplication.class', '**/aws/**'])
+            fileTree(dir: it, exclude: ['**/config/**', '**/BpmPeopleTimeApiApplication.class',
+                                        '**/aws/**', '**/**/domain/**'])
         })
     }
 }
@@ -91,7 +93,7 @@ check.dependsOn jacocoTestReport
 task buildZip(type: Zip) {
     from compileJava
     from processResources
-    into('lib'){
+    into('lib') {
         from configurations.runtime
     }
 }
