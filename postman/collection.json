@@ -1,13 +1,12 @@
 {
 	"info": {
-		"_postman_id": "9aff74e3-2fa6-44d3-90bf-8c7f95fddae8",
+		"_postman_id": "44805710-5a13-4664-9f3b-467ead6b0ab3",
 		"name": "people-time",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "time-templates",
-			"description": null,
 			"item": [
 				{
 					"name": "Create time-template",
@@ -224,7 +223,7 @@
 									"    pm.expect(jsonData.length).to.eql(0);",
 									"});",
 									"",
-									"postman.setNextRequest(null);"
+									"postman.setNextRequest('Create a new activity');"
 								],
 								"type": "text/javascript"
 							}
@@ -259,7 +258,6 @@
 		},
 		{
 			"name": "time-events",
-			"description": null,
 			"item": [
 				{
 					"name": "Start a time-event",
@@ -675,6 +673,223 @@
 									"key": "personId",
 									"value": "{{person_id}}"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "activities",
+			"item": [
+				{
+					"name": "Create a new activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "18615e6d-320f-4186-aa61-54ba3adfd52c",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.test(\"Name is correct\", function () {",
+									"    pm.expect(jsonData.name).to.eql('test-activity');",
+									"});",
+									"",
+									"pm.globals.set(\"activity-id\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"test-activity\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/activities",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update an existing activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9ab63ac7-1fa3-4b10-be78-f76d6328c868",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.test(\"Name is updated name\", function () {",
+									"    pm.expect(jsonData.name).to.eql('test-activity-updated');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"test-activity-updated\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/activities/{{activity-id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"activities",
+								"{{activity-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query one activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9ab63ac7-1fa3-4b10-be78-f76d6328c868",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.test(\"Name is updated name\", function () {",
+									"    pm.expect(jsonData.name).to.eql('test-activity-updated');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/activities/{{activity-id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"activities",
+								"{{activity-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query all activities",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9ab63ac7-1fa3-4b10-be78-f76d6328c868",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/activities",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "af5486cc-9b78-4766-bcb1-e63eb5c04ef4",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/activities/{{activity-id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"activities",
+								"{{activity-id}}"
 							]
 						}
 					},

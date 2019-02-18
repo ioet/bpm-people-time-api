@@ -50,7 +50,6 @@ public class ActivityController {
     })
     @PostMapping(produces = "application/json")
     public ResponseEntity<Activity> createActivity(@Valid @RequestBody Activity activity) {
-
         Activity activityCreated = activityRepository.save(activity);
         return new ResponseEntity<>(activityCreated, HttpStatus.CREATED);
     }
