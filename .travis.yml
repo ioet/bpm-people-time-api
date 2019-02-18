@@ -1,7 +1,7 @@
 sudo: required
 language: java
 jdk:
- - oraclejdk8
+  - oraclejdk8
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -9,5 +9,49 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+jobs:
+  include:
+    - stage: build
+      name: "Build project and unit tests"
+      script:
+        - ./gradlew assemble
+        - ./gradlew check
+    - stage: deploy-to-staging-env
+      name: "Deploy to AWS Lambda Staging Environment"
+      script:
+        - pip install --user awscli
+        - ./gradlew buildZip
+        - aws cloudformation package --template-file sam-people-time-api.yml --output-template-file output-sam-people-time-api.yml --s3-bucket cf-template-spring-boot-apps-as-lambda --s3-prefix people-time-api-staging
+        - aws cloudformation deploy --template-file output-sam-people-time-api.yml --stack-name bpm-people-time-api-staging --capabilities CAPABILITY_IAM --parameter-overrides "ApiEnvironment=Staging"
+        - curl $(aws cloudformation describe-stacks --stack-name bpm-people-time-api-staging | jq -r '.Stacks | .[].Outputs | .[].OutputValue')
+    - stage: perform-postman-tests
+      name: "Perform postman tests against Staging"
+      script:
+        - pip install --user awscli
+        - npm install -g newman
+        - BPM_PEOPLE_TIME_URL=$(aws cloudformation describe-stacks --stack-name bpm-people-time-api-staging | jq -r '.Stacks | .[].Outputs | .[].OutputValue')
+        - echo $BPM_PEOPLE_TIME_URL
+        - newman run postman/collection.json --global-var "BPM_PEOPLE_TIME_URL=$BPM_PEOPLE_TIME_URL"
+        - aws s3 rm s3://cf-template-spring-boot-apps-as-lambda/people-time-api-staging --recursive
+        - aws cloudformation delete-stack --stack-name bpm-people-time-api-staging
+    - stage: deploy-to-prod-env
+      name: "Deploy to AWS Lambda and Postman Test against Production"
+      script:
+        - pip install --user awscli
+        - npm install -g newman
+        - ./gradlew buildZip
+        - aws cloudformation package --template-file sam-people-time-api.yml --output-template-file output-sam-people-time-api.yml --s3-bucket cf-template-spring-boot-apps-as-lambda --s3-prefix people-time-api
+        - aws cloudformation deploy --template-file output-sam-people-time-api.yml --stack-name bpm-people-time-api --capabilities CAPABILITY_IAM
+        - BPM_PEOPLE_TIME_URL=$(aws cloudformation describe-stacks --stack-name bpm-people-time-api | jq -r '.Stacks | .[].Outputs | .[].OutputValue')
+        - echo $BPM_PEOPLE_TIME_URL
+        - newman run postman/collection.json --global-var "BPM_PEOPLE_TIME_URL=$BPM_PEOPLE_TIME_URL"
+stages:
+  - name: build
+  - name: deploy-to-staging-env
+    if: type = pull_request
+  - name: perform-postman-tests
+    if: type = pull_request
+  - name: deploy-to-prod-env
+    if: branch = master AND type = push
 after_success:
- - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)

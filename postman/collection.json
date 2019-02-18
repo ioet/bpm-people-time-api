@@ -30,8 +30,8 @@
 							"script": {
 								"id": "8ca1470a-1f0b-4d37-9a59-ca77ae029b92",
 								"exec": [
-									"var service_url = pm.environment.get(\"BPM_PEOPLE_TIME_URL\");",
-									"var url = service_url || \"http://localhost:8084\";",
+									"var service_url = pm.globals.get(\"BPM_PEOPLE_TIME_URL\");",
+									"var url = service_url || \"https://5ii4ql4iq1.execute-api.us-east-1.amazonaws.com/Stage\";",
 									"pm.globals.set(\"url\", url);",
 									"pm.globals.set(\"person_id\", \"not-existing-id\");",
 									""

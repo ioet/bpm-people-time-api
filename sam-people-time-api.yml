@@ -2,17 +2,25 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: BpmPeopleTime
 
-Resources:
+Parameters:
+  ApiEnvironment:
+    Type: String
+    Default: Production
+    AllowedValues:
+      - Staging
+      - Production
+    Description: Enter Staging or Development. Default is Production.
 
+Resources:
   PeopleTimeApiLambda:
     Type: AWS::Serverless::Function
     Properties:
       Handler: com.ioet.bpm.peopletime.aws.handler.AwsLambdaHandler::handleRequest
       Runtime: java8
       CodeUri: build/distributions/bpm-people-time-api-0.0.1.zip
-      MemorySize: 1512
+      MemorySize: 2048
       Role: arn:aws:iam::524819651720:role/API-lambda-deployment
-      Timeout: 60
+      Timeout: 300
       Events:
         GetResource:
           Type: Api
@@ -25,4 +33,4 @@ Outputs:
     Description: URL for application
     Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Stage'
     Export:
-      Name: PeopleTimeApi
+      Name: !Ref ApiEnvironment
