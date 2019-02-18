@@ -22,7 +22,7 @@ jobs:
         - pip install --user awscli
         - ./gradlew buildZip
         - aws cloudformation package --template-file sam-people-time-api.yml --output-template-file output-sam-people-time-api.yml --s3-bucket cf-template-spring-boot-apps-as-lambda --s3-prefix people-time-api-staging
-        - aws cloudformation deploy --template-file output-sam-people-time-api.yml --stack-name bpm-people-time-api-staging --capabilities CAPABILITY_IAM --parameter-overrides "ApiEnvironment=PeopleTimeStaging"
+        - aws cloudformation deploy --template-file output-sam-people-time-api.yml --stack-name bpm-people-time-api-staging --capabilities CAPABILITY_IAM --parameter-overrides "PeopleTimeApiEnvironment=PeopleTimeStaging"
         - curl $(aws cloudformation describe-stacks --stack-name bpm-people-time-api-staging | jq -r '.Stacks | .[].Outputs | .[].OutputValue')
     - stage: perform-postman-tests
       name: "Perform postman tests against Staging"
