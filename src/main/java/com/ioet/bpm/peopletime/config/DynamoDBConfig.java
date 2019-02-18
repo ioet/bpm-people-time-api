@@ -8,6 +8,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
+import com.ioet.bpm.peopletime.activities.domain.Activity;
 import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
 import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,7 @@ public class DynamoDBConfig {
             List<Class> modelClasses = new ArrayList<>();
             modelClasses.add(TimeTemplate.class);
             modelClasses.add(TimeEvent.class);
+            modelClasses.add(Activity.class);
 
             for (Class cls : modelClasses) {
                 log.info("Creating DynamoDB table for " + cls.getSimpleName());
