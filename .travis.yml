@@ -35,7 +35,7 @@ jobs:
         - aws s3 rm s3://cf-template-spring-boot-apps-as-lambda/people-time-api-staging --recursive
         - aws cloudformation delete-stack --stack-name bpm-people-time-api-staging
     - stage: deploy-to-prod-env
-      name: "Deploy to AWS Lambda and Postman Test against Production"
+      name: "Deploy to AWS Lambda and Postman Test against PeopleTimeProduction"
       script:
         - pip install --user awscli
         - npm install -g newman

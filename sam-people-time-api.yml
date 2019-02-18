@@ -5,11 +5,11 @@ Description: BpmPeopleTime
 Parameters:
   ApiEnvironment:
     Type: String
-    Default: Production
+    Default: PeopleTimeProduction
     AllowedValues:
-      - Staging
-      - Production
-    Description: Enter Staging or Development. Default is Production.
+      - PeopleTimeStaging
+      - PeopleTimeProduction
+    Description: Enter Staging or Development. Default is PeopleTimeProduction.
 
 Resources:
   PeopleTimeApiLambda:
