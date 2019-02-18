@@ -3,13 +3,13 @@ Transform: AWS::Serverless-2016-10-31
 Description: BpmPeopleTime
 
 Parameters:
-  ApiEnvironment:
+  PeopleTimeApiEnvironment:
     Type: String
     Default: PeopleTimeProduction
     AllowedValues:
-      - PeopleTimeStaging
       - PeopleTimeProduction
-    Description: Enter Staging or Development. Default is PeopleTimeProduction.
+      - PeopleTimeStaging
+    Description: Enter PeopleTimeStaging or PeopleTimeProduction. Default is PeopleTimeProduction.
 
 Resources:
   PeopleTimeApiLambda:
@@ -33,4 +33,4 @@ Outputs:
     Description: URL for application
     Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Stage'
     Export:
-      Name: !Ref ApiEnvironment
+      Name: !Ref PeopleTimeApiEnvironment
