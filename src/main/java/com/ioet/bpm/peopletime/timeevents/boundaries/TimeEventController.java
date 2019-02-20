@@ -1,7 +1,6 @@
 package com.ioet.bpm.peopletime.timeevents.boundaries;
 
 import com.ioet.bpm.peopletime.timeevents.domain.TimeEvent;
-import com.ioet.bpm.peopletime.timeevents.domain.TimeWorked;
 import com.ioet.bpm.peopletime.timeevents.repositories.TimeEventRepository;
 import com.ioet.bpm.peopletime.timeevents.services.TimeEventService;
 import com.ioet.bpm.peopletime.timetemplates.domain.TimeTemplate;
@@ -105,19 +104,5 @@ public class TimeEventController {
             return new ResponseEntity<>(stoppedTimeEvent, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-
-    @ApiOperation(value = "Query time worked", response = TimeWorked.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully returned time worked"),
-            @ApiResponse(code = 404, message = "No working hours found yet")
-    })
-    @GetMapping(path = "/time-worked", produces = "application/json")
-    public ResponseEntity<Iterable> getTimeWorked(@RequestParam(value = "personId") String personId) {
-        Iterable<TimeEvent> timeEvents = (Iterable<TimeEvent>) timeEventService.getLastActiveTimeEvents(personId, false);
-        for (TimeEvent te : timeEvents) {
-            long timeWorked = te.getStopTime().getTime() - te.getStartTime().getTime();
-        }
     }
 }

@@ -1,4 +1,4 @@
-package com.ioet.bpm.peopletime.timeevents.domain;
+package com.ioet.bpm.peopletime.timeworked.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
